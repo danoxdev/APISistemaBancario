@@ -1,0 +1,2 @@
+DNI, Nombre, Apellido, Domicilio, Fecha Nacimiento, Banco, Tipo Persona, Fecha alta
+27965989,Gabriel,Ponce,Calle 12,1981-08-20,Nacion,PERSONA_FISICA,2024-07-18
