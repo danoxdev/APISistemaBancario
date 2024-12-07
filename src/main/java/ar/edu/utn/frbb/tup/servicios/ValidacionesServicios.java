@@ -5,6 +5,7 @@ import ar.edu.utn.frbb.tup.modelo.Cliente;
 import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
 import ar.edu.utn.frbb.tup.modelo.TipoPersona;
 import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
+import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class ValidacionesServicios {
 
     public void validarDni(Long dni) {
         try {
-            if (dni < 1000000 || dni > 99999999) {
+            if (dni == 0 || dni < 1000000 || dni > 99999999) {
                 throw new IllegalArgumentException("Error: El dni debe tener entre 7 y 8 digitos");
             }
         } catch(NumberFormatException e){
@@ -32,17 +33,7 @@ public class ValidacionesServicios {
         }
     }
 
-    //validar tipo de persona
-    public void validarTipoPersona(String tipoPersona) {
-        try {
-            // Intenta convertirlo a TipoPersona
-            TipoPersona.valueOf(tipoPersona);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Error: El tipo de persona debe ser 'PERSONA_FISICA' o 'PERSONA_JURIDICA'");
-        }
-    }
-
-    public void validarDatosCompletos(Cliente cliente) {
+    public void validarDatosCompletos(ClienteDto cliente) {
 
         //Valido que el usuario ingreso todos los datos para poder crear nuestro cliente
         //Nombre
@@ -58,12 +49,12 @@ public class ValidacionesServicios {
         //Banco
         if (cliente.getBanco() == null || cliente.getBanco().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un banco");
         //Tipo persona
-        if (cliente.getTipoPersona() == null) throw new IllegalArgumentException("Error: Ingrese un tipo de persona");
+        if (cliente.getTipoPersona() == null || cliente.getTipoPersona().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de persona");
     }
 
-    public void validarClienteExistente(Cliente cliente) throws ClienteExistenteException {
+    public void validarClienteExistente(ClienteDto clienteDto) throws ClienteExistenteException {
         ClienteDao clienteDao = new ClienteDao();
-        if (clienteDao.findCliente(cliente.getDni()) != null){
+        if (clienteDao.findCliente(clienteDto.getDni()) != null){
             throw new ClienteExistenteException("Ya existe un cliente con el DNI ingresado");
         }
     }

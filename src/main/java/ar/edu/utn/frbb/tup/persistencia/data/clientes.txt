@@ -3,3 +3,4 @@ DNI, Nombre, Apellido, Domicilio, Fecha Nacimiento, Banco, Tipo Persona, Fecha a
 32563401,Daniel,D'Onofrio,Calle 123,1986-06-12,Provincia,PERSONA_FISICA,2024-07-18
 12345678,Nicolas,Rodriguez,Calle 297,1985-08-12,Provincia,PERSONA_FISICA,2024-12-05
 87654321,Alonso,Fernandez,Calle 308,1965-07-21,HSBC,PERSONA_FISICA,2024-12-05
+7854321,Pepito,Fernandez,Calle 3,1970-07-28,Nacion,PERSONA_FISICA,2024-12-07

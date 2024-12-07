@@ -28,7 +28,7 @@ public class Cliente extends Persona{
                 clienteDto.getDomicilio()
         );
         this.banco = clienteDto.getBanco();
-        this.tipoPersona = TipoPersona.valueOf(clienteDto.getTipoPersona());
+        this.tipoPersona = clienteDto.getTipoPersona() != null ? TipoPersona.fromString(clienteDto.getTipoPersona()) : null;
         this.fechaAlta = LocalDate.now();
     }
 

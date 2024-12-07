@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class ClienteDao extends BaseDao<Cliente>{
-    private final String RUTA_ARCHIVO = "src/main/java/ar/edu/utn/frbb/tup/persistencia/data/cliente.txt";
+    private final String RUTA_ARCHIVO = "src/main/java/ar/edu/utn/frbb/tup/persistencia/data/clientes.txt";
 
     public void inicializarClientes(){
         String encabezado = "DNI, Nombre, Apellido, Domicilio, Fecha Nacimiento, Banco, Tipo Persona, Fecha alta";

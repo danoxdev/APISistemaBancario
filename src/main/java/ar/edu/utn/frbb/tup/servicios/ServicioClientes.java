@@ -16,7 +16,6 @@ import java.util.List;
 @Component
 public class ServicioClientes {
 
-    private List<Cliente> clientes;
     ValidacionesServicios validar = new ValidacionesServicios();
 
     ClienteDao clienteDao = new ClienteDao();
@@ -28,23 +27,13 @@ public class ServicioClientes {
         return clientes;
     }
 
-    public void inicializarClientes() throws ClientesVaciosException {
-        this.clientes = clienteDao.findAllClientes();  // Cargar los clientes desde el DAO
+    public void inicializarClientes() {
+        clienteDao.inicializarClientes();
     }
 
     public Cliente crearCliente(ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
         Cliente cliente = new Cliente(clienteDto);
 
-        //Verifico que los datos esten completos
-        validar.validarDatosCompletos(cliente);
-        //Verifico que el dni sea valido
-        validar.validarDni(cliente.getDni());
-        //Verifico que el cliente no exista
-        validar.validarClienteExistente(cliente);
-        //Verifico que el cliente sea mayor de edad
-        validar.esMayordeEdad(cliente.getFechaNacimiento());
-        //Verifico tipo de persona
-        validar.validarTipoPersona(clienteDto.getTipoPersona());
         //Guardo el cliente ingresado
         clienteDao.saveCliente(cliente);
 
