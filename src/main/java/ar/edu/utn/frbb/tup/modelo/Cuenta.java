@@ -1,6 +1,9 @@
 package ar.edu.utn.frbb.tup.modelo;
 
+import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
+
 import java.time.LocalDate;
+import java.util.Random;
 
 
 public class Cuenta {
@@ -11,6 +14,24 @@ public class Cuenta {
     private String alias;
     private LocalDate fechaCreacion;
     private double saldo;
+
+    public Cuenta(){
+        Random r = new Random();
+        this.saldo = 0;
+        this.cbu = r.nextLong(99999999) + 10000000;
+        this.fechaCreacion = LocalDate.now();
+    }
+
+    public Cuenta(CuentaDto cuentaDto){
+        Random r = new Random();
+        this.dniTitular = cuentaDto.getDniTitular();
+        this.cbu = r.nextLong(99999999) + 10000000;
+        this.tipoCuenta = cuentaDto.getTipoCuenta();
+        this.tipoMoneda = cuentaDto.getTipoMoneda();
+        this.saldo = 0;
+        this.fechaCreacion = LocalDate.now();
+        this.alias = cuentaDto.getAlias();
+    }
 
     public Long getDniTitular() {
         return dniTitular;
