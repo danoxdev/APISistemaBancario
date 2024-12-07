@@ -1,10 +1,13 @@
 package ar.edu.utn.frbb.tup.presentacion.DTOs;
 
+import java.time.LocalDate;
+
 public class PersonaDto {
     private String nombre;
     private String apellido;
-    private String dni;
-    private String fechaNacimiento;
+    private String domicilio;
+    private Long dni;
+    private LocalDate fechaNacimiento;
 
     public String getNombre() {
         return nombre;
@@ -22,19 +25,27 @@ public class PersonaDto {
         this.apellido = apellido;
     }
 
-    public String getDni() {
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
+
+    public Long getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(Long dni) {
         this.dni = dni;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 }

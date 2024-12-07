@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.persistencia;
 
-import ar.edu.utn.frbb.tup.modelo.Cliente;
 import ar.edu.utn.frbb.tup.modelo.Cuenta;
 import ar.edu.utn.frbb.tup.modelo.TipoCuenta;
 import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
@@ -76,7 +75,7 @@ public class CuentaDao extends BaseDao<Cuenta> {
 
     public List<Long> getRelacionesDni(Long dni){
         //Funcion para guardar todos los CBUs que tiene el dni ingresado
-        List<Long> CvuRelacionados = new ArrayList<>();
+        List<Long> CBURelacionados = new ArrayList<>();
         try {
             File file = new File(RUTA_ARCHIVO);
 
@@ -90,7 +89,7 @@ public class CuentaDao extends BaseDao<Cuenta> {
                 String[] datos = linea.split(",");
 
                 if (Long.parseLong(datos[1]) == dni){ //Agrego el cbu relacionado con el dni
-                    CvuRelacionados.add(Long.parseLong(datos[0]));
+                    CBURelacionados.add(Long.parseLong(datos[0]));
                 }
             }
 
@@ -98,7 +97,7 @@ public class CuentaDao extends BaseDao<Cuenta> {
             throw new RuntimeException(e);
         }
 
-        return CvuRelacionados;
+        return CBURelacionados;
 
     }
 

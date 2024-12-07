@@ -1,9 +1,9 @@
 package ar.edu.utn.frbb.tup.presentacion.DTOs;
 
-public class ClienteDto extends PersonaDto {
+import ar.edu.utn.frbb.tup.modelo.TipoPersona;
+
+public class ClienteDto extends PersonaDto{
     private String banco;
-    private String mail;
-    private String domicilio;
     private String tipoPersona;
 
     public String getBanco() {
@@ -14,22 +14,6 @@ public class ClienteDto extends PersonaDto {
         this.banco = banco;
     }
 
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getDomicilio() {
-        return domicilio;
-    }
-
-    public void setDomicilio(String domicilio) {
-        this.domicilio = domicilio;
-    }
-
     public String getTipoPersona() {
         return tipoPersona;
     }
@@ -38,4 +22,5 @@ public class ClienteDto extends PersonaDto {
         this.tipoPersona = tipoPersona;
     }
 }
+
 

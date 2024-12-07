@@ -4,19 +4,19 @@ import java.time.LocalDate;
 
 
 public class Cuenta {
-    private long dniTitular;
-    private long cbu;
+    private Long dniTitular;
+    private Long cbu;
     private TipoCuenta tipoCuenta;
     private TipoMoneda tipoMoneda;
     private String alias;
     private LocalDate fechaCreacion;
     private double saldo;
 
-    public long getDniTitular() {
+    public Long getDniTitular() {
         return dniTitular;
     }
 
-    public void setDniTitular(long dniTitular) {
+    public void setDniTitular(Long dniTitular) {
         this.dniTitular = dniTitular;
     }
 
@@ -47,11 +47,11 @@ public class Cuenta {
         return this;
     }
 
-    public long getCbu() {
+    public Long getCbu() {
         return cbu;
     }
 
-    public Cuenta setCbu(long cbu) {
+    public Cuenta setCbu(Long cbu) {
         this.cbu = cbu;
         return this;
     }

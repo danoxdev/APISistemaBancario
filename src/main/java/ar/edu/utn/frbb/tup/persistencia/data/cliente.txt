@@ -1,2 +1,5 @@
 DNI, Nombre, Apellido, Domicilio, Fecha Nacimiento, Banco, Tipo Persona, Fecha alta
 27965989,Gabriel,Ponce,Calle 12,1981-08-20,Nacion,PERSONA_FISICA,2024-07-18
+32563401,Daniel,D'Onofrio,Calle 123,1986-06-12,Provincia,PERSONA_FISICA,2024-07-18
+12345678,Nicolas,Rodriguez,Calle 297,1985-08-12,Provincia,PERSONA_FISICA,2024-12-05
+87654321,Alonso,Fernandez,Calle 308,1965-07-21,HSBC,PERSONA_FISICA,2024-12-05

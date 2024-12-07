@@ -1,5 +1,7 @@
 package ar.edu.utn.frbb.tup.modelo;
 
+import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,8 +11,26 @@ public class Cliente extends Persona{
     private TipoPersona tipoPersona;
     private String banco;
     private LocalDate fechaAlta;
-//    private long numeroDeCliente;
     private Set<Cuenta> cuentas = new HashSet<>();
+
+    public Cliente(){
+        super();
+        this.fechaAlta = LocalDate.now();
+    }
+
+
+    public Cliente(ClienteDto clienteDto) {
+        super(
+                clienteDto.getNombre(),
+                clienteDto.getApellido(),
+                clienteDto.getDni(),
+                clienteDto.getFechaNacimiento(),
+                clienteDto.getDomicilio()
+        );
+        this.banco = clienteDto.getBanco();
+        this.tipoPersona = TipoPersona.valueOf(clienteDto.getTipoPersona());
+        this.fechaAlta = LocalDate.now();
+    }
 
     public TipoPersona getTipoPersona() {
         return tipoPersona;
@@ -47,14 +67,5 @@ public class Cliente extends Persona{
     public void removeCuenta(Cuenta cuenta){
         this.cuentas.remove(cuenta);
     }
-
-//    public long getNumeroDeCliente(){
-//        return  numeroDeCliente;
-//    }
-//
-//    public void setNumeroDeCliente(long numeroDeCliente){
-//        this.numeroDeCliente = numeroDeCliente;
-//    }
-
 
 }

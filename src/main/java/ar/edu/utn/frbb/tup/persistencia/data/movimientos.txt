@@ -1,7 +1,0 @@
-CBU Origen, fecha Operacion, hora Operacion, tipo operacion, monto
-20753651,2024-08-06,16:16,deposito,100.0
-20753651,2024-08-06,16:17,deposito,50.0
-20753651,2024-08-06,16:30,extraccion,100.0
-20753651,2024-08-06,16:31,transferencia,25.0
-20753651,2024-08-26,18:55,transferencia,5.0
-20753651,2024-08-26,19:34,transferencia,5.0

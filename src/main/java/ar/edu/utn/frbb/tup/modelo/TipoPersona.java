@@ -1,8 +1,10 @@
 package ar.edu.utn.frbb.tup.modelo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum TipoPersona {
-    PERSONA_FISICA("F"),
-    PERSONA_JURIDICA("J");
+    PERSONA_FISICA("PERSONA_FISICA"),
+    PERSONA_JURIDICA("PERSONA_JURIDICA");
 
     private final String descripcion;
 
