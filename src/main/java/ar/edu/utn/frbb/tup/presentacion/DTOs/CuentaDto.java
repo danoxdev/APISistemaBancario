@@ -5,9 +5,8 @@ import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
 
 public class CuentaDto {
     private Long dniTitular;
-    private Long cbu;
-    private TipoCuenta tipoCuenta;
-    private TipoMoneda tipoMoneda;
+    private String tipoCuenta;
+    private String tipoMoneda;
     private String alias;
 
     public Long getDniTitular() {
@@ -18,27 +17,19 @@ public class CuentaDto {
         this.dniTitular = dniTitular;
     }
 
-    public Long getCbu() {
-        return cbu;
-    }
-
-    public void setCbu(Long cbu) {
-        this.cbu = cbu;
-    }
-
-    public TipoCuenta getTipoCuenta() {
+    public String getTipoCuenta() {
         return tipoCuenta;
     }
 
-    public void setTipoCuenta(TipoCuenta tipoCuenta) {
+    public void setTipoCuenta(String tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
     }
 
-    public TipoMoneda getTipoMoneda() {
+    public String getTipoMoneda() {
         return tipoMoneda;
     }
 
-    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+    public void setTipoMoneda(String tipoMoneda) {
         this.tipoMoneda = tipoMoneda;
     }
 

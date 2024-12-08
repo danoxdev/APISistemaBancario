@@ -9,13 +9,15 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class CuentaDao extends BaseDao<Cuenta> {
     private final String RUTA_ARCHIVO = "src/main/java/ar/edu/utn/frbb/tup/persistencia/data/cuentas.txt";
     public void inicializarCuentas(){
-        String encabezado = "CBU, Cliente, Tipo de cuenta, Moneda, Alias, Fecha de creacion, Saldo";
+        String encabezado = "CBU, DNI Titular, Tipo de cuenta, Moneda, Alias, Fecha de creacion, Saldo";
         inicializarArchivo(encabezado, RUTA_ARCHIVO);
     }
 
@@ -99,6 +101,33 @@ public class CuentaDao extends BaseDao<Cuenta> {
 
         return CBURelacionados;
 
+    }
+
+    public Set<Cuenta> findAllCuentasDelCliente(long dni) {
+
+        Set<Cuenta> cuentasDelCliente = new HashSet<>();
+        try {
+            File file = new File(RUTA_ARCHIVO);
+
+            FileReader fileReader = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            //Primero agrego el encabezado al contenido,
+            String linea = reader.readLine();
+
+            while ((linea = reader.readLine()) != null) {
+                String[] datos = linea.split(",");
+
+                if (Long.parseLong(datos[1]) == dni) {
+                    cuentasDelCliente.add(parseDatosToObjet(datos));
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cuentasDelCliente;
     }
 
     //Funcion para parsear los datos leidos del archivo a un objeto tipo 'Cuenta'

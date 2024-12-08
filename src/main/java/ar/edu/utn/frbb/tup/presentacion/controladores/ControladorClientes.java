@@ -21,7 +21,7 @@ public class ControladorClientes {
     private ValidacionesServicios validacionesServicios;
 
 
-    public ControladorClientes(ServicioClientes servicioClientes, ValidacionesServicios validacionesServicios) throws ClientesVaciosException {
+    public ControladorClientes(ServicioClientes servicioClientes, ValidacionesServicios validacionesServicios) {
         this.servicioClientes = servicioClientes;
         this.validacionesServicios = validacionesServicios;
         servicioClientes.inicializarClientes();

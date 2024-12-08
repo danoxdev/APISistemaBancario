@@ -26,8 +26,8 @@ public class Cuenta {
         Random r = new Random();
         this.dniTitular = cuentaDto.getDniTitular();
         this.cbu = r.nextLong(99999999) + 10000000;
-        this.tipoCuenta = cuentaDto.getTipoCuenta();
-        this.tipoMoneda = cuentaDto.getTipoMoneda();
+        this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
+        this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.saldo = 0;
         this.fechaCreacion = LocalDate.now();
         this.alias = cuentaDto.getAlias();

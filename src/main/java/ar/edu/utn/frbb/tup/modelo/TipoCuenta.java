@@ -1,8 +1,8 @@
 package ar.edu.utn.frbb.tup.modelo;
 
 public enum TipoCuenta {
-    CUENTA_CORRIENTE("C"),
-    CAJA_AHORRO("A");
+    CAJA_AHORRO("CAJA_AHORRO"),
+    CUENTA_CORRIENTE("CUENTA_CORRIENTE");
 
     private final String descripcion;
 
@@ -20,6 +20,6 @@ public enum TipoCuenta {
                 return tipo;
             }
         }
-        throw new IllegalArgumentException("No se pudo encontrar un TipoCuenta con la descripcion: " + text);
+        throw new IllegalArgumentException("Error: El tipo de cuenta debe ser 'CAJA_AHORRO' o 'CUENTA_CORRIENTE'");
     }
 }

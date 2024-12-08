@@ -1,128 +1,133 @@
-//package ar.edu.utn.frbb.tup.servicios;
-//
-//import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
-//import ar.edu.utn.frbb.tup.modelo.Cliente;
-//import ar.edu.utn.frbb.tup.modelo.Cuenta;
-//import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
-//import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
-//import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
-//import java.util.List;
-//
-//public class ServicioCuentas {
-//    ValidacionesServicios validar = new ValidacionesServicios();
-//    ValidacionesPresentacion validarEntrada = new ValidacionesPresentacion();
-//    ServicioClientes buscar = new ServicioClientes();
-//    CuentaDao cuentaDao = new CuentaDao();
-//    ClienteDao clienteDao = new ClienteDao();
-//
-////    public void findAllCuentas() throws CuentasVaciasException {
-////        cuentaDao.findAllCuentas();
-////    }
-//
-//    public void inicializarCuentas() {
-//        cuentaDao.inicializarCuentas();
-//    }
-//
-////    public Cuenta buscarCuentas(Set<Cuenta> cuentas, String cbu){
-////        for (Cuenta c : cuentas) {
-////            if (c.getCbu() == Long.parseLong(cbu)) {
-////                return c;
-////            }
-////        }
-////        return null;
-////    }
-//
-//    public void mostrarCuentas(List<Cliente> clientes) throws CuentasVaciasException {
-//        String dni;
-//        //pedimos el dni del cliente del que queremos mostrar sus cuentas
-//        do {
-//            System.out.print("Ingrese el dni del cliente: ");
-//            dni = entrada.nextLine();
-//        } while (!validar.validarDni(dni));
-//        Cliente cliente = buscar.buscarCliente(clientes, dni);
-//        //validamos que el cliente exista
-//        if (cliente == null) {
-//            System.out.println("Cliente no encontrado, primero debe crearlo");
-//        } else {
-//            try {
-//                //si existe creo una lista y la lleno con las cuentas que posea el cliente
-//                List<Long> cbuList = cuentaDao.getRelacionesDni(Long.parseLong(dni));
-//                if (cbuList.isEmpty()) {
-//                    throw new CuentasVaciasException("El cliente no tiene cuentas registradas.");
-//                }
-//                //Muestro las cuentas recorriendo la lista de cbus y mostrando los datos de cada una de ellas
-//                System.out.println("Cuentas del cliente:");
-//                for (Long cbu : cbuList) {
-//                    Cuenta cuenta = cuentaDao.findCuenta(cbu);
-//                    if (cuenta != null) {
-//                        System.out.println("CBU: " + cuenta.getCbu());
-//                        System.out.println("Tipo de cuenta: " + cuenta.getTipoCuenta());
-//                        System.out.println("Moneda: " + cuenta.getTipoMoneda());
-//                        System.out.println("Alias: " + cuenta.getAlias());
-//                        System.out.println("Fecha de creación: " + cuenta.getFechaCreacion());
-//                        System.out.println("Saldo: " + cuenta.getSaldo());
-//                        System.out.println("-------------------------");
-//                    }
-//                }
-//            } catch (CuentasVaciasException e) {
-//                System.out.println(e.getMessage());
-//            }
-//        }
-//    }
-//
-//    public void crearCuenta(List<Cliente> clientes){
-//        String dni;
-//        do{
-//            System.out.print("Ingrese el dni del cliente: ");
-//            dni = entrada.nextLine();
-//        } while (!validar.validarDni(dni));
-//
-//
-//        Cliente cliente = buscar.buscarCliente(clientes, dni);
-//
-//        if (cliente == null) {
-//            System.out.println("Cliente no encontrado, primero debe crearlo");
-//        }
-//        else{
-//            Cuenta cuenta = inputcuenta.ingresarCuenta();
-//            cuenta.setDniTitular(Long.parseLong(dni));
-//            //agrego la cuenta a mi lista de cuentas del cliente
-////          cliente.addCuenta(cuenta);
-//            cuentaDao.saveCuenta(cuenta);
-//            System.out.println("Cuenta creada con exito: " + cuenta.getAlias());
-//            System.out.println("CBU: " + cuenta.getCbu());
-//        }
-//    }
-//
-//    public void eliminarCuenta (List<Cliente> clientes){
-//        String dni;
-//        do{
-//            System.out.print("Ingrese el dni del cliente: ");
-//            dni = entrada.nextLine();
-//        } while (!validar.validarDni(dni));
-//
-//        Cliente cliente = buscar.buscarCliente(clientes, dni);
-//
-//        if (cliente == null) {
-//            System.out.println("Cliente no encontrado, primero debe crearlo");
-//        }
-//        else{
-//            String cbu;
-//            do {
-//                System.out.print("Ingrese el CBU de la cuenta a eliminar: ");
-//                cbu = entrada.nextLine();
-//            } while (!validarEntrada.esLong(cbu));
-//
-//            Cuenta cuenta = cuentaDao.findCuentaDelCliente(Long.parseLong(cbu),Long.parseLong(dni));
-////            Cuenta cuenta = buscarCuentas(cliente.getCuentas(), cbu);
-//            if(cuenta == null) {
-//                System.out.println("Cuenta no encontrada");
-//            } else {
-//                System.out.println("La cuenta " + cuenta.getCbu() + " ha sido eliminada." );
-//                cuentaDao.deleteCuenta(Long.parseLong(cbu));
-////                cliente.getCuentas().remove(cuenta);
-//            }
-//
-//        }
-//    }
-//}
+package ar.edu.utn.frbb.tup.servicios;
+
+import ar.edu.utn.frbb.tup.excepciones.*;
+import ar.edu.utn.frbb.tup.modelo.Cliente;
+import ar.edu.utn.frbb.tup.modelo.Cuenta;
+import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
+import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
+import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
+import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+
+@Component
+public class ServicioCuentas {
+    ValidacionesServicios validar = new ValidacionesServicios();
+    CuentaDao cuentaDao = new CuentaDao();
+    ClienteDao clienteDao = new ClienteDao();
+    MovimientosDao movimientosDao = new MovimientosDao();
+
+
+    public void inicializarCuentas() {
+        cuentaDao.inicializarCuentas();
+    }
+
+    public Set<Cuenta> mostrarCuentas(Long dni) throws ClienteNoEncontradoException, CuentaNoEncontradaException {
+        //Funcion que devuelve el cliente encontrado o vuelve Null si no lo encontro
+        Cliente cliente = clienteDao.findCliente(dni);
+
+        if (cliente == null) {
+            //Lanzo excepcion si el cliente no fue encontrado
+            throw new ClienteNoEncontradoException("No se encontro el cliente con el DNI: " + dni);
+        }
+
+        //Funcion que me devuelve todas las cuentas que tiene el cliente
+        Set<Cuenta> cuentas = cuentaDao.findAllCuentasDelCliente(dni);
+
+        if (cuentas.isEmpty()){
+            throw new CuentaNoEncontradaException("No hay cuentas asociadas al cliente con DNI: " + dni);
+        }
+
+        //Retorna la lista de cuentas que tiene asociada el cliente
+        return cuentas;
+    }
+
+    public Cuenta crearCuenta(CuentaDto cuentaDto) throws ClienteNoEncontradoException, CuentaExistenteException, TipoCuentaExistenteException {
+        Cuenta cuenta = new Cuenta(cuentaDto);
+
+        //Valido que exista el cliente, si no lanza excepcion
+        Cliente cliente = clienteDao.findCliente(cuenta.getDniTitular());
+
+        if (cliente == null){
+            throw new ClienteNoEncontradoException("No se encontro el cliente con el DNI: " + cuenta.getDniTitular());
+        }
+
+        //Valido que si la cuenta mandada ya existia previamente, si no lanza excepcion
+        Cuenta cuentaExiste = cuentaDao.findCuenta(cuenta.getCbu());
+
+        if (cuentaExiste != null) {
+            throw new CuentaExistenteException("Ya tiene una cuenta con ese CBU");
+        }
+
+        //Valido que no exista una cuenta con el mismo tipo de cuenta y tipo de moneda
+        validar.cuentaMismoTipoMoneda(cuenta.getTipoCuenta(), cuenta.getTipoMoneda(), cuenta.getDniTitular());
+
+        //Agrego la cuenta al archivo
+        cuentaDao.saveCuenta(cuenta);
+
+        //Muestro en pantalla el resultado
+        return cuenta;
+    }
+
+    public Cuenta actualizarAlias(Long dni, Long cbu, String alias) throws CuentaNoEncontradaException, CuentasVaciasException, ClienteNoEncontradoException {
+
+        //Valido que exista el cliente, si no lanza excepcion
+        Cliente cliente = clienteDao.findCliente(dni);
+
+        if (cliente == null) {
+            throw new ClienteNoEncontradoException("No se encontro el cliente con el DNI: " + dni);
+        }
+
+        //Valido si el DNI tiene cuentas asociadas
+        List<Long> cuentasCbu = cuentaDao.getRelacionesDni(dni);
+        if (cuentasCbu.isEmpty()) {
+            throw new CuentasVaciasException("No hay cuentas asociadas al cliente con DNI: " + dni);
+        }
+
+        //Funcion que devuelve la cuenta encontrada o vuelve null si no lo encontro. Solo devuelve las cuentas que tiene asocida el cliente
+        Cuenta cuenta = cuentaDao.findCuentaDelCliente(cbu, dni);
+
+        if (cuenta == null) {
+            throw new CuentaNoEncontradaException("El cliente no tiene ninguna cuenta con el CBU: " + cbu);
+        }
+
+        cuentaDao.deleteCuenta(cbu); //Borro la cuenta ya que va ser actualizada
+
+        cuenta.setAlias(alias);
+
+        cuentaDao.saveCuenta(cuenta); //Guardo la cuenta actualizada
+
+        return cuenta;
+    }
+
+    public Cuenta eliminarCuenta(Long dni, Long cbu) throws ClienteNoEncontradoException, CuentasVaciasException, CuentaNoEncontradaException {
+
+        //Valido que exista el cliente, si no lanza excepcion
+        Cliente cliente = clienteDao.findCliente(dni);
+
+        if (cliente == null) {
+            throw new ClienteNoEncontradoException("No se encontro el cliente con el DNI: " + dni);
+        }
+
+        //Valido si el DNI tiene cuentas asociadas
+        List<Long> cuentasCbu = cuentaDao.getRelacionesDni(dni);
+        if (cuentasCbu.isEmpty()) {
+            throw new CuentasVaciasException("No hay cuentas asociadas al cliente con DNI: " + dni);
+        }
+
+        //Funcion que devuelve la cuenta encontrada o vuelve null si no lo encontro. Solo devuelve las cuentas que tiene asocida el cliente
+        Cuenta cuenta = cuentaDao.findCuentaDelCliente(cbu, dni);
+
+        if (cuenta == null) {
+            throw new CuentaNoEncontradaException("El cliente no tiene ninguna cuenta con el CBU: " + cbu);
+        }
+
+        //Borro la cuenta y los movimientos de la misma
+        cuentaDao.deleteCuenta(cbu);
+        movimientosDao.deleteMovimiento(cbu);
+
+        return cuenta;
+    }
+}

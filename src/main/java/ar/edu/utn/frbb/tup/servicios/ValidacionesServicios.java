@@ -1,15 +1,17 @@
 package ar.edu.utn.frbb.tup.servicios;
 import ar.edu.utn.frbb.tup.excepciones.ClienteExistenteException;
 import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
-import ar.edu.utn.frbb.tup.modelo.Cliente;
-import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
-import ar.edu.utn.frbb.tup.modelo.TipoPersona;
+import ar.edu.utn.frbb.tup.excepciones.TipoCuentaExistenteException;
+import ar.edu.utn.frbb.tup.modelo.*;
 import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
+import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
+import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class ValidacionesServicios {
@@ -61,6 +63,36 @@ public class ValidacionesServicios {
 
     // VALIDACIONES DE CUENTAS //
 
+    public void validarCuenta(CuentaDto cuentaDto ){
+
+        //Alias de la cuenta
+        if (cuentaDto.getAlias() == null || cuentaDto.getAlias().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un nombre");
+        //Tipo de cuenta
+        if (cuentaDto.getTipoCuenta() == null || cuentaDto.getTipoCuenta().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de cuenta");
+        //Tipo de moneda
+        if (cuentaDto.getTipoMoneda() == null || cuentaDto.getTipoMoneda().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de moneda");
+        //DNI Titular
+        if (cuentaDto.getDniTitular() == null) throw new IllegalArgumentException("Error: Ingrese un dni");
+        if (cuentaDto.getDniTitular() < 10000000 || cuentaDto.getDniTitular() > 99999999) throw new IllegalArgumentException("Error: El dni debe tener entre 7 y 8 digitos");
+    }
+
+    public void cuentaMismoTipoMoneda(TipoCuenta tipoCuenta, TipoMoneda tipoMoneda, Long dniTitular) throws TipoCuentaExistenteException {
+        CuentaDao cuentaDao = new CuentaDao();
+        Set<Cuenta> cuentasClientes = cuentaDao.findAllCuentasDelCliente(dniTitular);
+
+        for (Cuenta cuenta: cuentasClientes) {
+            if (tipoCuenta.equals(cuenta.getTipoCuenta()) && tipoMoneda.equals(cuenta.getTipoMoneda())) {
+                throw new TipoCuentaExistenteException("Ya tiene una cuenta con ese tipo de cuenta y tipo de moneda");
+            }
+        }
+    }
+
+    // VALIDACIONES DE OPERACIONES //
+
+    public boolean validarMonedaDestino(TipoMoneda tipoMonedaOrigen, TipoMoneda tipoMonedaDestino) {
+        return tipoMonedaOrigen == tipoMonedaDestino;
+    }
+
     public boolean validarCuentaDestino(String cuentaOrigen, String cuentaDestino) {
         if (!Objects.equals(cuentaOrigen, cuentaDestino)) {
             return true;
@@ -68,10 +100,6 @@ public class ValidacionesServicios {
             System.out.println("Error: el cbu de origen es igual al de destino.");
             return false;
         }
-    }
-
-    public boolean validarMonedaDestino(TipoMoneda tipoMonedaOrigen, TipoMoneda tipoMonedaDestino) {
-        return tipoMonedaOrigen == tipoMonedaDestino;
     }
 
 }
