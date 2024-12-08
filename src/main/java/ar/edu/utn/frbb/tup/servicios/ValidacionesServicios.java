@@ -108,4 +108,10 @@ public class ValidacionesServicios {
         }
     }
 
+    public void validarSaldo(Cuenta cuenta, double monto) throws CuentaSinDineroException {
+        if (cuenta.getSaldo() < monto){
+            throw new CuentaSinDineroException("No posee saldo suficiente para realizar la operacion, su saldo es de $" + cuenta.getSaldo());
+        }
+    }
+
 }
