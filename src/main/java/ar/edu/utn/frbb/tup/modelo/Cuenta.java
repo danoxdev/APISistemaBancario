@@ -18,14 +18,14 @@ public class Cuenta {
     public Cuenta(){
         Random r = new Random();
         this.saldo = 0;
-        this.cbu = r.nextLong(99999999) + 10000000;
+        this.cbu = this.cbu = Math.abs(r.nextLong()%99999999) + 10000000;
         this.fechaCreacion = LocalDate.now();
     }
 
     public Cuenta(CuentaDto cuentaDto){
         Random r = new Random();
         this.dniTitular = cuentaDto.getDniTitular();
-        this.cbu = r.nextLong(99999999) + 10000000;
+        this.cbu = Math.abs(r.nextLong()%99999999) + 10000000;
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
         this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.saldo = 0;

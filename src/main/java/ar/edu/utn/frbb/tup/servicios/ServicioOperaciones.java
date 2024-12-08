@@ -18,21 +18,44 @@ public class ServicioOperaciones {
     }
 
     public Operacion consultarSaldo (Long cbu) throws CuentaNoEncontradaException {
-        //Valido que la cuenta existe y que esta de alta
-    Cuenta cuenta = cuentaDao.findCuenta(cbu);
+        Cuenta cuenta = cuentaDao.findCuenta(cbu);
+        //Valido que la cuenta existe
+        validar.validarCuentaExistente(cbu);
 
-    if (cuenta == null){
-        throw new CuentaNoEncontradaException("No se encontro ninguna cuenta con el CBU: " + cbu);
-    }
+        //Tomo registro de la operacion que se hizo
+        movimientosDao.saveMovimiento("Consulta", 0, cuenta.getCbu());
 
-    //Tomo registro de la operacion que se hizo
-    movimientosDao.saveMovimiento("Consulta", 0, cuenta.getCbu());
+        //Devuelvo un Objeto operacion de la consulta que se hizo
+        return new Operacion()
+            .setCbu(cbu)
+            .setSaldoActual(cuenta.getSaldo())
+            .setTipoOperacion("Consulta");
+        }
 
-    //Devuelvo un Objeto operacion de la consulta que se hizo
-    return new Operacion()
-        .setCbu(cbu)
-        .setSaldoActual(cuenta.getSaldo())
-        .setTipoOperacion("Consulta");
+    public Operacion deposito(Long cbu , double monto) throws CuentaNoEncontradaException {
+
+        Cuenta cuenta = cuentaDao.findCuenta(cbu);
+
+        //Valido que la cuenta existe
+        validar.validarCuentaExistente(cbu);
+
+        //Borro la cuenta ya que va ser modificada
+        cuentaDao.deleteCuenta(cuenta.getCbu());
+
+        //Sumo el monto al saldo que tenia la cuenta
+        cuenta.setSaldo(cuenta.getSaldo() + monto);
+
+        //Tomo registro de la operacion que se hizo
+        movimientosDao.saveMovimiento("Deposito", monto, cuenta.getCbu());
+
+        //Guardo la cuenta modificada
+        cuentaDao.saveCuenta(cuenta);
+
+        return new Operacion()
+                .setCbu(cbu)
+                .setSaldoActual(cuenta.getSaldo())
+                .setMonto(monto)
+                .setTipoOperacion("Deposito");
     }
 }
 

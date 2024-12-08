@@ -5,7 +5,6 @@ import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
 import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
 import ar.edu.utn.frbb.tup.excepciones.ClientesVaciosException;
 import ar.edu.utn.frbb.tup.excepciones.*;
-import ar.edu.utn.frbb.tup.excepciones.CuentaEstaDeBajaException;
 import ar.edu.utn.frbb.tup.excepciones.MovimientosVaciosException;
 import ar.edu.utn.frbb.tup.excepciones.TransferenciaFailException;
 import org.springframework.http.HttpHeaders;
@@ -37,7 +36,7 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             ClienteExistenteException.class, ClienteMenorDeEdadException.class,
             TipoCuentaExistenteException.class, CuentaExistenteException.class,
             TransferenciaFailException.class, CuentaDistintaMonedaException.class,
-            CuentaSinDineroException.class, CuentaEstaDeBajaException.class,})
+            CuentaSinDineroException.class})
     protected ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();

@@ -1,7 +1,5 @@
 package ar.edu.utn.frbb.tup.servicios;
-import ar.edu.utn.frbb.tup.excepciones.ClienteExistenteException;
-import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
-import ar.edu.utn.frbb.tup.excepciones.TipoCuentaExistenteException;
+import ar.edu.utn.frbb.tup.excepciones.*;
 import ar.edu.utn.frbb.tup.modelo.*;
 import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
 import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
@@ -84,6 +82,14 @@ public class ValidacionesServicios {
             if (tipoCuenta.equals(cuenta.getTipoCuenta()) && tipoMoneda.equals(cuenta.getTipoMoneda())) {
                 throw new TipoCuentaExistenteException("Ya tiene una cuenta con ese tipo de cuenta y tipo de moneda");
             }
+        }
+    }
+
+    public void validarCuentaExistente(Long cbu) throws CuentaNoEncontradaException {
+        CuentaDao cuentaDao = new CuentaDao();
+        Cuenta cuenta = cuentaDao.findCuenta(cbu);
+        if (cuenta == null){
+            throw new CuentaNoEncontradaException("No se encontro ninguna cuenta con el CBU: " + cbu);
         }
     }
 
