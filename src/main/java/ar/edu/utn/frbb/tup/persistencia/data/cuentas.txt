@@ -1,2 +1,2 @@
 CBU, DNI Titular, Tipo de cuenta, Moneda, Alias, Fecha de creacion, Saldo
-57944900,27965989,CAJA_AHORRO,DOLARES,peperino,2024-12-07,0.0
+57944900,27965989,CAJA_AHORRO,DOLARES,peperino,2024-12-07,25.30

@@ -27,12 +27,12 @@ public class CuentaDao extends BaseDao<Cuenta> {
         saveInfo(infoAguardar, RUTA_ARCHIVO);
     }
 
-    public void deleteCuenta(long CBU){
+    public void deleteCuenta(Long CBU){
         deleteInfo(CBU, RUTA_ARCHIVO);
 
     }
 
-    public Cuenta findCuenta(long CBU){
+    public Cuenta findCuenta(Long CBU){
         return findInfo(CBU, RUTA_ARCHIVO);
     }
 
@@ -46,7 +46,7 @@ public class CuentaDao extends BaseDao<Cuenta> {
         return cuentas;
     }
 
-    public Cuenta findCuentaDelCliente(long cbu, long dni){
+    public Cuenta findCuentaDelCliente(Long cbu, Long dni){
         //Funcion para encontrar la cuenta del cliente, se hace para que el usuario SOLO pueda eliminar la cuenta del cliente que le pertenece
         try {
             File file = new File(RUTA_ARCHIVO);
@@ -103,7 +103,7 @@ public class CuentaDao extends BaseDao<Cuenta> {
 
     }
 
-    public Set<Cuenta> findAllCuentasDelCliente(long dni) {
+    public Set<Cuenta> findAllCuentasDelCliente(Long dni) {
 
         Set<Cuenta> cuentasDelCliente = new HashSet<>();
         try {

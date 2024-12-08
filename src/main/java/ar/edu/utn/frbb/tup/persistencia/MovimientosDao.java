@@ -18,16 +18,24 @@ public class MovimientosDao extends BaseDao<Movimiento>{
         inicializarArchivo(encabezado, RUTA_ARCHIVO);
     }
 
-    public void saveMovimiento(Movimiento movimiento){
+    public void saveMovimiento(String tipoOperacion, double monto, Long cbu){
+        Movimiento movimiento = new Movimiento();
+        movimiento.setCbu(cbu);
+        movimiento.setFechaOperacion(LocalDate.now());
+        //Pongo la hora actual con la hora, minutos y segundos (sin coma)
+        movimiento.setHoraOperacion(LocalTime.now().withNano(0));
+        movimiento.setTipoOperacion(tipoOperacion);
+        movimiento.setMonto(monto);
+
         String infoAguardar = movimiento.getCbu() + "," + movimiento.getFechaOperacion() + "," + movimiento.getHoraOperacion() + "," + movimiento.getTipoOperacion() + "," + movimiento.getMonto();
         saveInfo(infoAguardar, RUTA_ARCHIVO);
     }
 
-    public void deleteMovimiento(Long cvu){
-        deleteInfo(cvu, RUTA_ARCHIVO);
+    public void deleteMovimiento(Long cbu){
+        deleteInfo(cbu, RUTA_ARCHIVO);
     }
 
-    public List<Movimiento> findMovimientos(long CVU){
+    public List<Movimiento> findMovimientos(long CBU){
         List<Movimiento> movimientos = new ArrayList<>();
         try {
 
@@ -44,7 +52,7 @@ public class MovimientosDao extends BaseDao<Movimiento>{
                 //Empiezo a leer las lineas de los movimientos, y cada linea la divido por comas con el '.split(",")', para tener los datos de los movimientos
                 String[] datos = linea.split(",");
 
-                if (Long.parseLong(datos[0]) == CVU){
+                if (Long.parseLong(datos[0]) == CBU){
                     //Guardo en una lista todos los movimientos del cvu ingresado
                     movimientos.add(parseDatosToObjet(datos));
                 }
@@ -64,8 +72,8 @@ public class MovimientosDao extends BaseDao<Movimiento>{
         Movimiento movimiento = new Movimiento();
 
         movimiento.setCbu(Long.parseLong(datos[0]));
-        movimiento.setFecha(LocalDate.parse(datos[1]));
-        movimiento.setHora(LocalTime.parse(datos[2]));
+        movimiento.setFechaOperacion(LocalDate.parse(datos[1]));
+        movimiento.setHoraOperacion(LocalTime.parse(datos[2]));
         movimiento.setTipoOperacion(datos[3]);
         movimiento.setMonto(Double.parseDouble(datos[4]));
 
