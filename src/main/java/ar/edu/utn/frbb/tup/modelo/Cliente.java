@@ -6,18 +6,18 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cliente extends Persona{
+public class Cliente extends Persona {
 
     private TipoPersona tipoPersona;
     private String banco;
     private LocalDate fechaAlta;
     private Set<Cuenta> cuentas = new HashSet<>();
+    private Set<Prestamo> prestamos = new HashSet<>();
 
-    public Cliente(){
+    public Cliente() {
         super();
         this.fechaAlta = LocalDate.now();
     }
-
 
     public Cliente(ClienteDto clienteDto) {
         super(
@@ -60,12 +60,31 @@ public class Cliente extends Persona{
         return cuentas;
     }
 
+    public void setCuentas(Set<Cuenta> cuentas) {
+        this.cuentas = cuentas;
+    }
+
     public void addCuenta(Cuenta cuenta) {
         this.cuentas.add(cuenta);
     }
 
-    public void removeCuenta(Cuenta cuenta){
+    public void removeCuenta(Cuenta cuenta) {
         this.cuentas.remove(cuenta);
     }
 
+    public Set<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    public void setPrestamos(Set<Prestamo> prestamos) {
+        this.prestamos = prestamos;
+    }
+
+    public void addPrestamo(Prestamo prestamo) {
+        this.prestamos.add(prestamo);
+    }
+
+    public void removePrestamo(Prestamo prestamo) {
+        this.prestamos.remove(prestamo);
+    }
 }

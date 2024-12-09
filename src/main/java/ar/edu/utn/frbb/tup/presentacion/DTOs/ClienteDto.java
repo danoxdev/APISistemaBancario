@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.presentacion.DTOs;
 
-import ar.edu.utn.frbb.tup.modelo.TipoPersona;
 
 public class ClienteDto extends PersonaDto{
     private String banco;

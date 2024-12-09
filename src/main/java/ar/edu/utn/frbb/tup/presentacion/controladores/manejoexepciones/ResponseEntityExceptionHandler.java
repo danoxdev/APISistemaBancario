@@ -4,9 +4,13 @@ import ar.edu.utn.frbb.tup.excepciones.ClienteExistenteException;
 import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
 import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
 import ar.edu.utn.frbb.tup.excepciones.ClientesVaciosException;
-import ar.edu.utn.frbb.tup.excepciones.*;
+import ar.edu.utn.frbb.tup.excepciones.CuentaExistenteException;
+import ar.edu.utn.frbb.tup.excepciones.CuentaNoEncontradaException;
+import ar.edu.utn.frbb.tup.excepciones.CuentaSinDineroException;
+import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
 import ar.edu.utn.frbb.tup.excepciones.MovimientosVaciosException;
-import ar.edu.utn.frbb.tup.excepciones.TransferenciaFailException;
+import ar.edu.utn.frbb.tup.excepciones.TipoCuentaExistenteException;
+import ar.edu.utn.frbb.tup.excepciones.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,14 +19,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class ResponseEntityExceptionHandler extends org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler {
 
+    // Manejo de excepciones 404 - Not Found
     @ExceptionHandler(value = { ClienteNoEncontradoException.class,
             ClientesVaciosException.class, CuentaNoEncontradaException.class,
-            CuentasVaciasException.class, MovimientosVaciosException.class})
+            ClienteSinPrestamosException.class, CuentasVaciasException.class,
+            CuentaMonedaNoExisteException.class, MovimientosVaciosException.class,
+            PrestamosVaciosException.class})
     protected ResponseEntity<Object> handleMateriaNotFound(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
@@ -32,11 +38,12 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value = {IllegalArgumentException.class,
+    // Manejo de excepciones 400 - Bad Request
+    @ExceptionHandler(value = { IllegalArgumentException.class,
             ClienteExistenteException.class, ClienteMenorDeEdadException.class,
-            TipoCuentaExistenteException.class, CuentaExistenteException.class,
-            TransferenciaFailException.class, CuentaDistintaMonedaException.class,
-            CuentaSinDineroException.class})
+            TipoCuentaExistenteException.class, TipoMonedaExistenteException.class,
+            CuentaExistenteException.class, CuentaDistintaMonedaException.class,
+            CuentaSinDineroException.class })
     protected ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
@@ -44,6 +51,17 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         error.setErrorMessage(exceptionMessage);
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    // Manejo de excepciones 500 - Internal Server Error
+    @ExceptionHandler(value = { RuntimeException.class })
+    protected ResponseEntity<Object> handleInternalServerError(RuntimeException ex, WebRequest request) {
+        String exceptionMessage = ex.getMessage();
+        CustomApiError error = new CustomApiError();
+        error.setErrorCode(500);
+        error.setErrorMessage(exceptionMessage != null ? exceptionMessage : "Error interno del servidor");
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @Override

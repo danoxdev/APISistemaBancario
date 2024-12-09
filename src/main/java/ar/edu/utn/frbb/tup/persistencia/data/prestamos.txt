@@ -1,0 +1,2 @@
+ID Prestamo, DNI Cliente, Monto, Plazo Meses, Pagos Realizados, Saldo Restante
+1,32563401,500000.0,6,0,500000.0

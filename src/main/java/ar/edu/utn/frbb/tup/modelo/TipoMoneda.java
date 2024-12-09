@@ -16,6 +16,6 @@ public enum TipoMoneda {
                 return tipo;
             }
         }
-        throw new IllegalArgumentException("No se pudo encontrar un TipoMoneda con la descripción: " + text + ", debe ser 'P' o 'D'");
+        throw new IllegalArgumentException("No se pudo encontrar un TipoMoneda con la descripción: " + text + ", debe ser 'PESOS' o 'DOLARES'");
     }
 }

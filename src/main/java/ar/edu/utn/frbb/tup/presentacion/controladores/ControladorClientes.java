@@ -1,9 +1,6 @@
 package ar.edu.utn.frbb.tup.presentacion.controladores;
 
-import ar.edu.utn.frbb.tup.excepciones.ClienteExistenteException;
-import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
-import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
-import ar.edu.utn.frbb.tup.excepciones.ClientesVaciosException;
+import ar.edu.utn.frbb.tup.excepciones.*;
 import ar.edu.utn.frbb.tup.modelo.Cliente;
 import ar.edu.utn.frbb.tup.servicios.ServicioClientes;
 import ar.edu.utn.frbb.tup.servicios.ValidacionesServicios;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("api/clientes")
 public class ControladorClientes {
     private ServicioClientes servicioClientes;
     private ValidacionesServicios validacionesServicios;
@@ -28,7 +25,7 @@ public class ControladorClientes {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> getClientes() throws ClientesVaciosException {
+    public ResponseEntity<List<Cliente>> getClientes() throws ClientesVaciosException, CuentasVaciasException {
         List<Cliente> clientes = servicioClientes.mostrarClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }

@@ -1,9 +1,6 @@
 package ar.edu.utn.frbb.tup.servicios;
 
-import ar.edu.utn.frbb.tup.excepciones.ClienteExistenteException;
-import ar.edu.utn.frbb.tup.excepciones.ClienteMenorDeEdadException;
-import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
-import ar.edu.utn.frbb.tup.excepciones.ClientesVaciosException;
+import ar.edu.utn.frbb.tup.excepciones.*;
 import ar.edu.utn.frbb.tup.modelo.Cliente;
 import ar.edu.utn.frbb.tup.modelo.TipoPersona;
 import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
@@ -22,7 +19,7 @@ public class ServicioClientes {
     CuentaDao cuentaDao = new CuentaDao();
     MovimientosDao movimientosDao = new MovimientosDao();
 
-    public List<Cliente> mostrarClientes() throws ClientesVaciosException {
+    public List<Cliente> mostrarClientes() throws ClientesVaciosException, CuentasVaciasException {
         List<Cliente> clientes = clienteDao.findAllClientes();
         return clientes;
     }
@@ -42,7 +39,7 @@ public class ServicioClientes {
     }
 
 
-    public Cliente eliminarCliente(long dni) throws ClienteNoEncontradoException, ClienteExistenteException {
+    public Cliente eliminarCliente(long dni) throws ClienteNoEncontradoException {
 
         // Busca y valida que el cliente exista
         Cliente clienteBorrado = buscarCliente(dni);

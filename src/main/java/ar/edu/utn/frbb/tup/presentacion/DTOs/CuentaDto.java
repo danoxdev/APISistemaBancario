@@ -1,7 +1,5 @@
 package ar.edu.utn.frbb.tup.presentacion.DTOs;
 
-import ar.edu.utn.frbb.tup.modelo.TipoCuenta;
-import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
 
 public class CuentaDto {
     private Long dniTitular;

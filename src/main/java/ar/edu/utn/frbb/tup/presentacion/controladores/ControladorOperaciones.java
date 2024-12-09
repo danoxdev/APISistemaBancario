@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/operaciones")
+@RequestMapping("api/operaciones")
 
 public class ControladorOperaciones {
     private final ServicioOperaciones servicioOperaciones;
