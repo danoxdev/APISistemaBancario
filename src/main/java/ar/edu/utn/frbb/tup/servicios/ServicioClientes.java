@@ -7,21 +7,30 @@ import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
 import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
 public class ServicioClientes {
 
-    ValidacionesServicios validar = new ValidacionesServicios();
+    private final ValidacionesPresentacion validacionesPresentacion;
+    private final ValidacionesServicios validacionesServicios;
+    private final ClienteDao clienteDao;
+    private final CuentaDao cuentaDao;
+    private final MovimientosDao movimientosDao;
 
-    ClienteDao clienteDao = new ClienteDao();
-    CuentaDao cuentaDao = new CuentaDao();
-    MovimientosDao movimientosDao = new MovimientosDao();
+    // Constructor con inyección de dependencias
+    public ServicioClientes(ValidacionesPresentacion validacionesPresentacion, ValidacionesServicios validacionesServicios, ClienteDao clienteDao, CuentaDao cuentaDao, MovimientosDao movimientosDao) {
+        this.validacionesPresentacion = validacionesPresentacion;
+        this.validacionesServicios = validacionesServicios;
+        this.clienteDao = clienteDao;
+        this.cuentaDao = cuentaDao;
+        this.movimientosDao = movimientosDao;
+    }
 
     public List<Cliente> mostrarClientes() throws ClientesVaciosException, CuentasVaciasException {
-        List<Cliente> clientes = clienteDao.findAllClientes();
-        return clientes;
+        return clienteDao.findAllClientes();
     }
 
     public void inicializarClientes() {
@@ -29,13 +38,16 @@ public class ServicioClientes {
     }
 
     public Cliente crearCliente(ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
+        // Validar cliente antes de crearlo
+        validacionesPresentacion.validarDatosCompletos(clienteDto);
+        validacionesServicios.validarDni(clienteDto.getDni());
+        validacionesServicios.validarClienteExistente(clienteDto);
+        validacionesServicios.esMayordeEdad(clienteDto.getFechaNacimiento());
+
+        // Crear el cliente y guardarlo en la capa de persistencia
         Cliente cliente = new Cliente(clienteDto);
-
-        //Guardo el cliente ingresado
         clienteDao.saveCliente(cliente);
-
         return cliente;
-
     }
 
 
