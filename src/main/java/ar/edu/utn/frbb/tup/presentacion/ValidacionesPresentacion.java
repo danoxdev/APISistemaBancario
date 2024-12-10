@@ -32,7 +32,10 @@ public class ValidacionesPresentacion {
     //Validar DNI
     public void validarDni(Long dni) {
         try {
-            if (dni == 0 || dni < 1000000 || dni > 99999999) {
+            if (dni <= 0 ) {
+                throw new IllegalArgumentException("Error: DNI invalido");
+            }
+            if (dni < 1000000 || dni > 99999999) {
                 throw new IllegalArgumentException("Error: El dni debe tener entre 7 y 8 digitos");
             }
         } catch(NumberFormatException e){
