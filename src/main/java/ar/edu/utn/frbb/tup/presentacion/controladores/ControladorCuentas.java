@@ -7,6 +7,7 @@ import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
 import ar.edu.utn.frbb.tup.excepciones.TipoCuentaExistenteException;
 import ar.edu.utn.frbb.tup.modelo.Cuenta;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioCuentas;
 import ar.edu.utn.frbb.tup.servicios.ValidacionesServicios;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,11 @@ import java.util.Set;
 @RestController
 @RequestMapping("api/cuentas")
 public class ControladorCuentas {
-    private ValidacionesServicios validacionesServicios;
+    private ValidacionesPresentacion validacionesPresentacion;
     private ServicioCuentas servicioCuentas;
 
-    public ControladorCuentas (ValidacionesServicios validacionesServicios, ServicioCuentas servicioCuentas) {
-        this.validacionesServicios = validacionesServicios;
+    public ControladorCuentas (ValidacionesPresentacion validacionesPresentacion, ServicioCuentas servicioCuentas) {
+        this.validacionesPresentacion = validacionesPresentacion;
         this.servicioCuentas = servicioCuentas;
         servicioCuentas.inicializarCuentas();
     }
@@ -34,7 +35,7 @@ public class ControladorCuentas {
 
     @PostMapping
     public ResponseEntity<Cuenta> crearCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaExistenteException, CuentaExistenteException, ClienteNoEncontradoException {
-        validacionesServicios.validarCuenta(cuentaDto);
+        validacionesPresentacion.validarCuenta(cuentaDto);
         Cuenta cuenta = servicioCuentas.crearCuenta(cuentaDto);
         return new ResponseEntity<>(cuenta, HttpStatus.CREATED);
     }

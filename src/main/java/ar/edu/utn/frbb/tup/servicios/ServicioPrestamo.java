@@ -37,7 +37,7 @@ public class ServicioPrestamo {
     public Map<String, Object> solicitarPrestamo(Long dniCliente, int plazoMeses, double monto, String tipoMoneda)
             throws CuentaMonedaNoExisteException, ClienteNoEncontradoException {
 
-        double tasaInteresMensual = 0.01; // Tasa de interés mensual fija
+        double tasaInteresMensual = 0.05; // Tasa de interés mensual fija
 
         // Verifica que exista un cliente con el DNI ingresado
         Cliente cliente = clienteDao.findCliente(dniCliente);
@@ -69,7 +69,6 @@ public class ServicioPrestamo {
             }
         }
 
-
         // Si no se encontró una cuenta con la moneda ingresada, se lanza una excepción
         if (cuentaBancaria == null) {
             throw new CuentaMonedaNoExisteException("No existe una cuenta bancaria con la moneda ingresada");
@@ -88,20 +87,13 @@ public class ServicioPrestamo {
             List<Prestamo> prestamos = prestamoDao.findAllPrestamos();
             int id = prestamos.isEmpty() ? 1 : prestamos.get(prestamos.size() - 1).getIdPrestamo() + 1;
 
-
             // Se crea el préstamo y se agrega a la base de datos
             Prestamo prestamo = new Prestamo(id, cliente.getDni(), monto, plazoMeses, 0, monto);
             prestamoDao.savePrestamo(prestamo);
 
-            // Se agrega el préstamo al cliente
-            Set<Prestamo> prestamosClienteSet = cliente.getPrestamos();
-            List<Prestamo> prestamosCliente = new ArrayList<>(prestamosClienteSet);
-            prestamosCliente.add(prestamo);
-            cliente.setPrestamos(new HashSet<>(prestamosCliente));
-
-
-            // Se actualiza el saldo de la cuenta bancaria
+            // Se actualiza el saldo de la cuenta bancaria y se guarda en el archivo
             cuentaBancaria.setSaldo(cuentaBancaria.getSaldo() + monto);
+            cuentaDao.saveCuenta(cuentaBancaria); // Guardar los cambios en cuentas.txt
 
             // Se crea el plan de pagos del préstamo
             List<Object> planPagos = new ArrayList<>();

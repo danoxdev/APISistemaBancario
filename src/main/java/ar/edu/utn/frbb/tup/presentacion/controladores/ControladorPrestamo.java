@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.excepciones.CuentaMonedaNoExisteException;
 import ar.edu.utn.frbb.tup.excepciones.PrestamosVaciosException;
 import ar.edu.utn.frbb.tup.modelo.Prestamo;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioPrestamo;
 import ar.edu.utn.frbb.tup.servicios.ValidacionesServicios;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("api/prestamos")
 public class ControladorPrestamo {
-    private final ServicioPrestamo servicioPrestamo;
+    private final ValidacionesPresentacion validacionesPresentacion;
     private final ValidacionesServicios validacionesServicios;
+    private final ServicioPrestamo servicioPrestamo;
 
-    public ControladorPrestamo(ServicioPrestamo servicioPrestamo, ValidacionesServicios validacionesServicios) {
+    public ControladorPrestamo(ValidacionesPresentacion validacionesPresentacion, ValidacionesServicios validacionesServicios, ServicioPrestamo servicioPrestamo) {
+        this.validacionesPresentacion = validacionesPresentacion;
         this.servicioPrestamo = servicioPrestamo;
         this.validacionesServicios = validacionesServicios;
         servicioPrestamo.inicializarPrestamos();
@@ -36,7 +39,7 @@ public class ControladorPrestamo {
     public ResponseEntity<Map<String, Object>> solicitarPrestamo(@RequestBody PrestamoDto prestamoDto)
             throws ClienteNoEncontradoException, CuentaMonedaNoExisteException, PrestamosVaciosException {
         // Validar la prestamoDto
-        validacionesServicios.validarSolicitudPrestamo(prestamoDto);
+        validacionesPresentacion.validarSolicitudPrestamo(prestamoDto);
 
         // Procesar la prestamoDto
         Map<String, Object> resultado = servicioPrestamo.solicitarPrestamo(
