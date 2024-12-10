@@ -2,12 +2,10 @@ package ar.edu.utn.frbb.tup.servicios;
 
 import ar.edu.utn.frbb.tup.excepciones.*;
 import ar.edu.utn.frbb.tup.modelo.Cliente;
-import ar.edu.utn.frbb.tup.modelo.TipoPersona;
 import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
 import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
-import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class ServicioClientes {
         this.movimientosDao = movimientosDao;
     }
 
-    public List<Cliente> mostrarClientes() throws ClientesVaciosException, CuentasVaciasException {
+    public List<Cliente> mostrarClientes() throws CuentasVaciasException {
         return clienteDao.findAllClientes();
     }
 
@@ -38,7 +36,7 @@ public class ServicioClientes {
     public Cliente crearCliente(ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
         // Validar cliente antes de crearlo
         validacionesServicios.validarDni(clienteDto.getDni());
-        validacionesServicios.validarClienteExistente(clienteDto);
+        validacionesServicios.validarClienteYaExiste(clienteDto);
         validacionesServicios.esMayordeEdad(clienteDto.getFechaNacimiento());
 
         // Crear el cliente y guardarlo en la capa de persistencia
@@ -48,10 +46,16 @@ public class ServicioClientes {
     }
 
 
-    public Cliente eliminarCliente(long dni) throws ClienteNoEncontradoException {
+    public Cliente eliminarCliente(long dni) throws ClienteNoEncontradoException, ClienteTieneCuentasException, ClienteTienePrestamosException {
 
         // Busca y valida que el cliente exista
         Cliente clienteBorrado = buscarCliente(dni);
+
+        //Valido que el cliente no tenga cuentas
+        validacionesServicios.validarClienteSinCuentas(dni);
+
+        //Valido que el cliente no tenga prestamos
+        validacionesServicios.validarClienteSinPrestamos(dni);
 
         //Elimino el cliente con el DNI ingresado
         clienteDao.deleteCliente(dni);

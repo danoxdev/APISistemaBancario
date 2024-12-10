@@ -102,20 +102,13 @@ public class ServicioCuentas {
         return cuenta;
     }
 
-    public Cuenta eliminarCuenta(Long dni, Long cbu) throws ClienteNoEncontradoException, CuentasVaciasException, CuentaNoEncontradaException {
+    public Cuenta eliminarCuenta(Long dni, Long cbu) throws ClienteNoEncontradoException, CuentasVaciasException, CuentaNoEncontradaException, CuentaTieneSaldoException {
 
         //Valido que exista el cliente, si no lanza excepcion
-        Cliente cliente = clienteDao.findCliente(dni);
-
-        if (cliente == null) {
-            throw new ClienteNoEncontradoException("No se encontro el cliente con el DNI: " + dni);
-        }
+        validar.validarClienteExistente(dni);
 
         //Valido si el DNI tiene cuentas asociadas
-        List<Long> cuentasCbu = cuentaDao.getRelacionesDni(dni);
-        if (cuentasCbu.isEmpty()) {
-            throw new CuentasVaciasException("No hay cuentas asociadas al cliente con DNI: " + dni);
-        }
+        validar.validarCuentasCliente(dni);
 
         //Funcion que devuelve la cuenta encontrada o vuelve null si no lo encontro. Solo devuelve las cuentas que tiene asocida el cliente
         Cuenta cuenta = cuentaDao.findCuentaDelCliente(cbu, dni);
@@ -123,6 +116,9 @@ public class ServicioCuentas {
         if (cuenta == null) {
             throw new CuentaNoEncontradaException("El cliente no tiene ninguna cuenta con el CBU: " + cbu);
         }
+
+        //Valido que la cuenta no tenga saldo, si lo tiene lanza excepcion
+        validar.validarSaldoCuenta(cbu);
 
         //Borro la cuenta y los movimientos de la misma
         cuentaDao.deleteCuenta(cbu);

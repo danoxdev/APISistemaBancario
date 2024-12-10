@@ -91,9 +91,14 @@ public class ServicioPrestamo {
             Prestamo prestamo = new Prestamo(id, cliente.getDni(), monto, plazoMeses, 0, monto);
             prestamoDao.savePrestamo(prestamo);
 
-            // Se actualiza el saldo de la cuenta bancaria y se guarda en el archivo
+            //Elimino la cuenta para actualizar el archivo
+            cuentaDao.deleteCuenta(cuentaBancaria.getCbu());
+
+            //Se actualiza el saldo de la cuenta bancaria
             cuentaBancaria.setSaldo(cuentaBancaria.getSaldo() + monto);
-            cuentaDao.saveCuenta(cuentaBancaria); // Guardar los cambios en cuentas.txt
+
+            //Guardo la cuenta con el nuevo saldo
+            cuentaDao.saveCuenta(cuentaBancaria);
 
             // Se crea el plan de pagos del préstamo
             List<Object> planPagos = new ArrayList<>();

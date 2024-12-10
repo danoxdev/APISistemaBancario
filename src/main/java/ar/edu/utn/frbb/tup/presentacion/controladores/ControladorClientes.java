@@ -45,7 +45,7 @@ public class ControladorClientes {
 
 
     @DeleteMapping("/{dni}")
-    public ResponseEntity<Cliente> eliminarCliente(@PathVariable Long dni) throws ClienteNoEncontradoException {
+    public ResponseEntity<Cliente> eliminarCliente(@PathVariable Long dni) throws ClienteNoEncontradoException, ClienteTieneCuentasException, ClienteTienePrestamosException {
         validacionesPresentacion.validarDni(dni);
         return new ResponseEntity<>(servicioClientes.eliminarCliente(dni), HttpStatus.OK);
     }

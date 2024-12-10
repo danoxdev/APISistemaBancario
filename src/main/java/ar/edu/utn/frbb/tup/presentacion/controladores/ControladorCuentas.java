@@ -43,7 +43,7 @@ public class ControladorCuentas {
     }
 
     @DeleteMapping("/{dni}/{cbu}")
-    public ResponseEntity<Cuenta> eliminarCuenta(@PathVariable Long dni, @PathVariable Long cbu) throws CuentasVaciasException, CuentaNoEncontradaException, ClienteNoEncontradoException {
+    public ResponseEntity<Cuenta> eliminarCuenta(@PathVariable Long dni, @PathVariable Long cbu) throws CuentasVaciasException, CuentaNoEncontradaException, ClienteNoEncontradoException, CuentaTieneSaldoException {
         validacionesPresentacion.validarDni(dni);
         validacionesPresentacion.validarCBU(cbu);
         return new ResponseEntity<>(servicioCuentas.eliminarCuenta(dni, cbu), HttpStatus.OK);

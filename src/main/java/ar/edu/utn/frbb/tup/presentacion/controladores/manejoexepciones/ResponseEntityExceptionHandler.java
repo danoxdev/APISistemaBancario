@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.Objects;
+
 @ControllerAdvice
 public class ResponseEntityExceptionHandler extends org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler {
 
@@ -45,7 +47,8 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
             ClienteExistenteException.class, ClienteMenorDeEdadException.class,
             TipoCuentaExistenteException.class, TipoMonedaExistenteException.class,
             CuentaExistenteException.class, CuentaDistintaMonedaException.class,
-            CuentaSinDineroException.class })
+            CuentaSinDineroException.class, ClienteTieneCuentasException.class,
+            ClienteTienePrestamosException.class, CuentaTieneSaldoException.class})
     protected ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
@@ -59,14 +62,28 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class, ConversionFailedException.class })
     protected ResponseEntity<Object> handleTypeMismatch(Exception ex, WebRequest request) {
         String parameterName = null;
+        boolean isNumericType = false;
 
         if (ex instanceof MethodArgumentTypeMismatchException) {
-            parameterName = ((MethodArgumentTypeMismatchException) ex).getName();
-        } else if (ex instanceof ConversionFailedException) {
-            parameterName = "un parámetro";
+            MethodArgumentTypeMismatchException mismatchException = (MethodArgumentTypeMismatchException) ex;
+            parameterName = mismatchException.getName();
+            Class<?> expectedClass = mismatchException.getRequiredType();
+
+            // Verificar si el tipo esperado es numérico
+            if (expectedClass != null &&
+                    (expectedClass.equals(Long.class) || expectedClass.equals(Integer.class) || expectedClass.equals(Double.class))) {
+                isNumericType = true;
+            }
         }
 
-        String exceptionMessage = String.format("Error: El valor ingresado para '%s' es invalido.", parameterName != null ? parameterName : "el campo");
+        // Si el tipo esperado no es numérico, no manejar la excepción
+        if (!isNumericType) {
+            return null; // Dejar que otras excepciones manejen este caso
+        }
+
+        // Construir mensaje de error para valores numéricos inválidos
+        String exceptionMessage = String.format("Error: El valor ingresado para '%s' debe ser un número válido.",
+                parameterName != null ? parameterName : "el campo");
 
         CustomApiError error = new CustomApiError();
         error.setErrorCode(400);
@@ -74,6 +91,8 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+
 
 
     // Manejo de excepciones 500 - Internal Server Error
