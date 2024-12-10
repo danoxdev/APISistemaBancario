@@ -62,11 +62,11 @@ public class ClienteDao extends BaseDao<Cliente> {
         return cliente;
     }
 
-    public List<Cliente> findAllClientes() throws CuentasVaciasException {
+    public List<Cliente> findAllClientes() throws ClientesVaciosException {
         List<Cliente> clientes = findAllInfo(RUTA_ARCHIVO);
 
         if (clientes.isEmpty()) {
-            throw new CuentasVaciasException("No se encontraron clientes.");
+            throw new ClientesVaciosException("No se encontraron clientes.");
         }
 
         for (Cliente cliente : clientes) {

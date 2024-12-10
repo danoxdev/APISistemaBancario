@@ -26,8 +26,11 @@ public class ControladorClientes {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> getClientes() throws ClientesVaciosException, CuentasVaciasException {
+    public ResponseEntity<List<Cliente>> getClientes() throws ClientesVaciosException {
         List<Cliente> clientes = servicioClientes.mostrarClientes();
+        if (clientes.isEmpty()) {
+            throw new ClientesVaciosException("No hay clientes registrados.");
+        }
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 

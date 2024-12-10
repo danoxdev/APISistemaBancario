@@ -25,7 +25,7 @@ public class ServicioClientes {
         this.movimientosDao = movimientosDao;
     }
 
-    public List<Cliente> mostrarClientes() throws CuentasVaciasException {
+    public List<Cliente> mostrarClientes() throws ClientesVaciosException {
         return clienteDao.findAllClientes();
     }
 
