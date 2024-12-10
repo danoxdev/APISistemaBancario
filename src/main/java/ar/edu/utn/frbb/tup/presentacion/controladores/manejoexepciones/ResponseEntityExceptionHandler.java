@@ -11,6 +11,7 @@ import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
 import ar.edu.utn.frbb.tup.excepciones.MovimientosVaciosException;
 import ar.edu.utn.frbb.tup.excepciones.TipoCuentaExistenteException;
 import ar.edu.utn.frbb.tup.excepciones.*;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,6 +20,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ResponseEntityExceptionHandler extends org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler {
@@ -52,6 +54,27 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    // Manejo de errores de conversión
+    @ExceptionHandler({ MethodArgumentTypeMismatchException.class, ConversionFailedException.class })
+    protected ResponseEntity<Object> handleTypeMismatch(Exception ex, WebRequest request) {
+        String parameterName = null;
+
+        if (ex instanceof MethodArgumentTypeMismatchException) {
+            parameterName = ((MethodArgumentTypeMismatchException) ex).getName();
+        } else if (ex instanceof ConversionFailedException) {
+            parameterName = "un parámetro";
+        }
+
+        String exceptionMessage = String.format("Error: El valor ingresado para '%s' es invalido.", parameterName != null ? parameterName : "el campo");
+
+        CustomApiError error = new CustomApiError();
+        error.setErrorCode(400);
+        error.setErrorMessage(exceptionMessage);
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
 
     // Manejo de excepciones 500 - Internal Server Error
     @ExceptionHandler(value = { RuntimeException.class })

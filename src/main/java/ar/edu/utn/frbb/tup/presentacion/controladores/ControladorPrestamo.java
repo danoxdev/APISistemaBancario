@@ -3,7 +3,6 @@ package ar.edu.utn.frbb.tup.presentacion.controladores;
 import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
 import ar.edu.utn.frbb.tup.excepciones.ClienteSinPrestamosException;
 import ar.edu.utn.frbb.tup.excepciones.CuentaMonedaNoExisteException;
-import ar.edu.utn.frbb.tup.excepciones.PrestamosVaciosException;
 import ar.edu.utn.frbb.tup.modelo.Prestamo;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
 import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
@@ -28,7 +27,7 @@ public class ControladorPrestamo {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> solicitarPrestamo(@RequestBody PrestamoDto prestamoDto) throws ClienteNoEncontradoException, CuentaMonedaNoExisteException, PrestamosVaciosException {
+    public ResponseEntity<Map<String, Object>> solicitarPrestamo(@RequestBody PrestamoDto prestamoDto) throws ClienteNoEncontradoException, CuentaMonedaNoExisteException {
         validacionesPresentacion.validarSolicitudPrestamo(prestamoDto);
 
         Map<String, Object> resultado = servicioPrestamo.solicitarPrestamo(

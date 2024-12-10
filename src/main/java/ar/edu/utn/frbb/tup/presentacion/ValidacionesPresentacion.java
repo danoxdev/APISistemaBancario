@@ -74,13 +74,9 @@ public class ValidacionesPresentacion {
     }
 
     //Validar CBU
-    public void validarCBU(Long cbu) {
-        try {
-            if (cbu <= 0) {
-                throw new IllegalArgumentException("Error: CBU invalido");
-            }
-        } catch(NumberFormatException e){
-            throw new IllegalArgumentException("Error: El CBU debe ser un numero");
+    public void validarCBU (Long cbu) {
+        if (cbu == null || cbu <= 0) {
+            throw new IllegalArgumentException("Error: CBU invalido");
         }
     }
     // VALIDACIONES DE OPERACIONES //
