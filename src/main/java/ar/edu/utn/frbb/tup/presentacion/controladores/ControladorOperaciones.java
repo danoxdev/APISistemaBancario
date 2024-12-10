@@ -5,21 +5,23 @@ import ar.edu.utn.frbb.tup.excepciones.CuentaSinDineroException;
 import ar.edu.utn.frbb.tup.excepciones.MovimientosVaciosException;
 import ar.edu.utn.frbb.tup.modelo.Movimiento;
 import ar.edu.utn.frbb.tup.modelo.Operacion;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioOperaciones;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/operaciones")
 
 public class ControladorOperaciones {
+    private ValidacionesPresentacion validacionesPresentacion;
     private final ServicioOperaciones servicioOperaciones;
 
-    public ControladorOperaciones(ServicioOperaciones servicioOperaciones) {
+    public ControladorOperaciones(ValidacionesPresentacion validacionesPresentacion, ServicioOperaciones servicioOperaciones) {
+        this.validacionesPresentacion = validacionesPresentacion;
         this.servicioOperaciones = servicioOperaciones;
         servicioOperaciones.inicializarMovimientos();
     }
@@ -33,6 +35,7 @@ public class ControladorOperaciones {
     //Deposito
     @PutMapping("/deposito/{cbu}")
     public ResponseEntity<Operacion> getDeposito(@PathVariable Long cbu, @RequestParam double monto) throws CuentaNoEncontradaException {
+        validacionesPresentacion.validarMontoDeposito(monto);
         return new ResponseEntity<>(servicioOperaciones.deposito(cbu, monto), HttpStatus.OK);
     }
 

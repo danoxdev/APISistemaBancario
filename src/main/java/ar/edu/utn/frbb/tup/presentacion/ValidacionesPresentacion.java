@@ -4,10 +4,9 @@ import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-
+@Service
 public class ValidacionesPresentacion {
 
     // VALIDACIONES DE CLIENTES //
@@ -57,6 +56,15 @@ public class ValidacionesPresentacion {
         } catch (IllegalArgumentException e) {
             // Si no se puede convertir, lanzamos una excepción
             throw new IllegalArgumentException("El tipo de moneda ingresado no es válido. Debe ser 'PESOS' o 'DOLARES'.");
+        }
+    }
+
+    // VALIDACIONES DE OPERACIONES //
+
+    //Monto
+    public void validarMontoDeposito(double monto) {
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto del depósito debe ser mayor a 0.");
         }
     }
 
