@@ -2,6 +2,7 @@ package ar.edu.utn.frbb.tup.presentacion.controladores;
 
 import ar.edu.utn.frbb.tup.excepciones.*;
 import ar.edu.utn.frbb.tup.modelo.Cliente;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioClientes;
 import ar.edu.utn.frbb.tup.servicios.ValidacionesServicios;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
@@ -14,13 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("api/clientes")
 public class ControladorClientes {
+    private ValidacionesPresentacion validacionesPresentacion;
     private ServicioClientes servicioClientes;
-    private ValidacionesServicios validacionesServicios;
 
 
-    public ControladorClientes(ServicioClientes servicioClientes, ValidacionesServicios validacionesServicios) {
+    public ControladorClientes(ValidacionesPresentacion validacionesPresentacion, ServicioClientes servicioClientes) {
+        this.validacionesPresentacion= validacionesPresentacion;
         this.servicioClientes = servicioClientes;
-        this.validacionesServicios = validacionesServicios;
         servicioClientes.inicializarClientes();
     }
 
@@ -32,17 +33,20 @@ public class ControladorClientes {
 
     @GetMapping("/{dni}")
     public ResponseEntity<Cliente> getClientePorDni(@PathVariable Long dni) throws ClienteNoEncontradoException {
+        validacionesPresentacion.validarDni(dni);
         return new ResponseEntity<>(servicioClientes.buscarCliente(dni), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
+        validacionesPresentacion.validarDatosCompletos(clienteDto);
         return new ResponseEntity<>(servicioClientes.crearCliente(clienteDto), HttpStatus.CREATED);
     }
 
 
     @DeleteMapping("/{dni}")
     public ResponseEntity<Cliente> eliminarCliente(@PathVariable Long dni) throws ClienteNoEncontradoException, ClienteExistenteException {
+        validacionesPresentacion.validarDni(dni);
         return new ResponseEntity<>(servicioClientes.eliminarCliente(dni), HttpStatus.OK);
     }
 

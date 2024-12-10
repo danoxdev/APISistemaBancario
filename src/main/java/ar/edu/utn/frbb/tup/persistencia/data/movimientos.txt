@@ -25,3 +25,4 @@ CBU Origen, Fecha de operacion, Hora de operacion, Tipo de operacion, Monto
 94529000,2024-12-09,10:26:43,Consulta,0.0
 94529000,2024-12-09,10:26:44,Consulta,0.0
 94529000,2024-12-09,22:01:21,Consulta,0.0
+57944900,2024-12-10,10:12:24,Deposito,350.0

@@ -29,23 +29,27 @@ public class ControladorCuentas {
 
     @GetMapping("/{dni}")
     public ResponseEntity<Set<Cuenta>> mostrarCuentas(@PathVariable Long dni) throws CuentaNoEncontradaException, ClienteNoEncontradoException, CuentasVaciasException {
+        validacionesPresentacion.validarDni(dni);
         return new ResponseEntity<>(servicioCuentas.mostrarCuentas(dni), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Cuenta> crearCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaExistenteException, CuentaExistenteException, ClienteNoEncontradoException {
         validacionesPresentacion.validarCuenta(cuentaDto);
-        Cuenta cuenta = servicioCuentas.crearCuenta(cuentaDto);
-        return new ResponseEntity<>(cuenta, HttpStatus.CREATED);
+        return new ResponseEntity<>(servicioCuentas.crearCuenta(cuentaDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{dni}/{cbu}")
     public ResponseEntity<Cuenta> actualizarAlias(@PathVariable Long dni, @PathVariable Long cbu, @RequestParam String alias) throws CuentaNoEncontradaException, ClienteNoEncontradoException, CuentaExistenteException, TipoCuentaExistenteException, CuentasVaciasException {
+        validacionesPresentacion.validarDni(dni);
+        validacionesPresentacion.validarCBU(cbu);
         return new ResponseEntity<>(servicioCuentas.actualizarAlias(dni, cbu, alias), HttpStatus.OK);
     }
 
     @DeleteMapping("/{dni}/{cbu}")
     public ResponseEntity<Cuenta> eliminarCuenta(@PathVariable Long dni, @PathVariable Long cbu) throws CuentasVaciasException, CuentaNoEncontradaException, ClienteNoEncontradoException {
+        validacionesPresentacion.validarDni(dni);
+        validacionesPresentacion.validarCBU(cbu);
         return new ResponseEntity<>(servicioCuentas.eliminarCuenta(dni, cbu), HttpStatus.OK);
     }
 }

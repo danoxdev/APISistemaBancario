@@ -8,7 +8,6 @@ import ar.edu.utn.frbb.tup.modelo.Prestamo;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
 import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioPrestamo;
-import ar.edu.utn.frbb.tup.servicios.ValidacionesServicios;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +19,18 @@ import java.util.Set;
 @RequestMapping("api/prestamos")
 public class ControladorPrestamo {
     private final ValidacionesPresentacion validacionesPresentacion;
-    private final ValidacionesServicios validacionesServicios;
     private final ServicioPrestamo servicioPrestamo;
 
-    public ControladorPrestamo(ValidacionesPresentacion validacionesPresentacion, ValidacionesServicios validacionesServicios, ServicioPrestamo servicioPrestamo) {
+    public ControladorPrestamo(ValidacionesPresentacion validacionesPresentacion, ServicioPrestamo servicioPrestamo) {
         this.validacionesPresentacion = validacionesPresentacion;
         this.servicioPrestamo = servicioPrestamo;
-        this.validacionesServicios = validacionesServicios;
         servicioPrestamo.inicializarPrestamos();
     }
 
-    /**
-     * Endpoint para solicitar un préstamo.
-     * Entrada: JSON con los datos del préstamo.
-     * Salida: JSON con el estado del préstamo, mensaje y plan de pagos.
-     */
     @PostMapping
-    public ResponseEntity<Map<String, Object>> solicitarPrestamo(@RequestBody PrestamoDto prestamoDto)
-            throws ClienteNoEncontradoException, CuentaMonedaNoExisteException, PrestamosVaciosException {
-        // Validar la prestamoDto
+    public ResponseEntity<Map<String, Object>> solicitarPrestamo(@RequestBody PrestamoDto prestamoDto) throws ClienteNoEncontradoException, CuentaMonedaNoExisteException, PrestamosVaciosException {
         validacionesPresentacion.validarSolicitudPrestamo(prestamoDto);
 
-        // Procesar la prestamoDto
         Map<String, Object> resultado = servicioPrestamo.solicitarPrestamo(
                 prestamoDto.getDniCliente(),
                 prestamoDto.getPlazoMeses(),
@@ -52,17 +41,9 @@ public class ControladorPrestamo {
         return new ResponseEntity<>(resultado, HttpStatus.CREATED);
     }
 
-    /**
-     * Endpoint para listar los préstamos de un cliente por su DNI.
-     * Entrada: DNI como parámetro de ruta.
-     * Salida: JSON con la lista de préstamos.
-     */
     @GetMapping("/{dni}")
-    public ResponseEntity<Set<Prestamo>> listarPrestamos(@PathVariable Long dni)
-            throws ClienteNoEncontradoException, ClienteSinPrestamosException {
-        // Obtener los préstamos del cliente
-        Set<Prestamo> prestamos = servicioPrestamo.listarPrestamos(dni);
-
-        return new ResponseEntity<>(prestamos, HttpStatus.OK);
+    public ResponseEntity<Set<Prestamo>> listarPrestamos (@PathVariable Long dni) throws ClienteNoEncontradoException, ClienteSinPrestamosException {
+        validacionesPresentacion.validarDni(dni);
+        return new ResponseEntity<>(servicioPrestamo.listarPrestamos(dni), HttpStatus.OK);
     }
 }

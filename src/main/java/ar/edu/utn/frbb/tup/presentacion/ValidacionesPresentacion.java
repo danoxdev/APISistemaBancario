@@ -29,6 +29,17 @@ public class ValidacionesPresentacion {
         if (cliente.getTipoPersona() == null || cliente.getTipoPersona().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de persona");
     }
 
+    //Validar DNI
+    public void validarDni(Long dni) {
+        try {
+            if (dni == 0 || dni < 1000000 || dni > 99999999) {
+                throw new IllegalArgumentException("Error: El dni debe tener entre 7 y 8 digitos");
+            }
+        } catch(NumberFormatException e){
+            throw new IllegalArgumentException("Error: El dni debe ser un numero");
+        }
+    }
+
     // VALIDACIONES DE CUENTAS //
     public void validarCuenta(CuentaDto cuentaDto ){
 
@@ -59,10 +70,20 @@ public class ValidacionesPresentacion {
         }
     }
 
+    //Validar CBU
+    public void validarCBU(Long cbu) {
+        try {
+            if (cbu <= 0) {
+                throw new IllegalArgumentException("Error: CBU invalido");
+            }
+        } catch(NumberFormatException e){
+            throw new IllegalArgumentException("Error: El CBU debe ser un numero");
+        }
+    }
     // VALIDACIONES DE OPERACIONES //
 
     //Monto
-    public void validarMontoDeposito(double monto) {
+    public void validarMonto(double monto) {
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto del depósito debe ser mayor a 0.");
         }

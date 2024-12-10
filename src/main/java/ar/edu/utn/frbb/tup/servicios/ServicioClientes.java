@@ -14,15 +14,13 @@ import java.util.List;
 @Component
 public class ServicioClientes {
 
-    private final ValidacionesPresentacion validacionesPresentacion;
     private final ValidacionesServicios validacionesServicios;
     private final ClienteDao clienteDao;
     private final CuentaDao cuentaDao;
     private final MovimientosDao movimientosDao;
 
     // Constructor con inyección de dependencias
-    public ServicioClientes(ValidacionesPresentacion validacionesPresentacion, ValidacionesServicios validacionesServicios, ClienteDao clienteDao, CuentaDao cuentaDao, MovimientosDao movimientosDao) {
-        this.validacionesPresentacion = validacionesPresentacion;
+    public ServicioClientes(ValidacionesServicios validacionesServicios, ClienteDao clienteDao, CuentaDao cuentaDao, MovimientosDao movimientosDao) {
         this.validacionesServicios = validacionesServicios;
         this.clienteDao = clienteDao;
         this.cuentaDao = cuentaDao;
@@ -39,7 +37,6 @@ public class ServicioClientes {
 
     public Cliente crearCliente(ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
         // Validar cliente antes de crearlo
-        validacionesPresentacion.validarDatosCompletos(clienteDto);
         validacionesServicios.validarDni(clienteDto.getDni());
         validacionesServicios.validarClienteExistente(clienteDto);
         validacionesServicios.esMayordeEdad(clienteDto.getFechaNacimiento());
