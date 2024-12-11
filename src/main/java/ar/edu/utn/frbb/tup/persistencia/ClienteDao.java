@@ -1,11 +1,9 @@
 package ar.edu.utn.frbb.tup.persistencia;
 
-import ar.edu.utn.frbb.tup.excepciones.CuentasVaciasException;
 import ar.edu.utn.frbb.tup.modelo.Cliente;
 import ar.edu.utn.frbb.tup.modelo.Cuenta;
 import ar.edu.utn.frbb.tup.modelo.Prestamo;
 import ar.edu.utn.frbb.tup.modelo.TipoPersona;
-import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
 import ar.edu.utn.frbb.tup.excepciones.ClientesVaciosException;
 import org.springframework.stereotype.Repository;
 
