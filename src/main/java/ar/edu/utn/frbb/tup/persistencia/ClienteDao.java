@@ -16,12 +16,7 @@ public class ClienteDao extends BaseDao<Cliente> {
     private final String RUTA_ARCHIVO = "src/main/java/ar/edu/utn/frbb/tup/persistencia/data/clientes.txt";
 
     private final CuentaDao cuentaDao;
-    private final PrestamoDao prestamoDao; // Se agrega PrestamoDao
-
-    public ClienteDao() {
-        this.cuentaDao = new CuentaDao();
-        this.prestamoDao = new PrestamoDao();
-    }
+    private final PrestamoDao prestamoDao;
 
     public ClienteDao(CuentaDao cuentaDao, PrestamoDao prestamoDao) {
         this.cuentaDao = cuentaDao;

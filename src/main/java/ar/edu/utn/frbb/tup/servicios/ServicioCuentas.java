@@ -14,11 +14,21 @@ import java.util.Set;
 
 @Component
 public class ServicioCuentas {
-    ValidacionesServicios validar = new ValidacionesServicios();
-    CuentaDao cuentaDao = new CuentaDao();
-    ClienteDao clienteDao = new ClienteDao();
-    MovimientosDao movimientosDao = new MovimientosDao();
+    private final ValidacionesServicios validar;
+    private final CuentaDao cuentaDao;
+    private final ClienteDao clienteDao;
+    private final MovimientosDao movimientosDao;
 
+    // Constructor con inyección de dependencias
+    public ServicioCuentas(ValidacionesServicios validar,
+                           CuentaDao cuentaDao,
+                           ClienteDao clienteDao,
+                           MovimientosDao movimientosDao) {
+        this.validar = validar;
+        this.cuentaDao = cuentaDao;
+        this.clienteDao = clienteDao;
+        this.movimientosDao = movimientosDao;
+    }
 
     public void inicializarCuentas() {
         cuentaDao.inicializarCuentas();
