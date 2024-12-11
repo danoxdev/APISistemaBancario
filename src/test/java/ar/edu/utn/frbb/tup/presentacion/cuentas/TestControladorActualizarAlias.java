@@ -14,7 +14,6 @@ import org.mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -98,7 +97,7 @@ public class TestControladorActualizarAlias {
     }
 
     @Test
-    public void testActualizarAlias_Success() throws ClienteNoEncontradoException, CuentasVaciasException, CuentaNoEncontradaException {
+    public void testActualizarAliasExitosamente() throws ClienteNoEncontradoException, CuentasVaciasException, CuentaNoEncontradaException {
         // Configuramos los mocks para que el cliente y la cuenta existan
         when(clienteDao.findCliente(12345678L)).thenReturn(cliente);
         when(cuentaDao.getRelacionesDni(12345678L)).thenReturn(List.of(cuenta.getCbu())); // Devuelve una lista con el CBU
