@@ -138,18 +138,19 @@ public class ServicioPrestamo {
     public Set<Prestamo> listarPrestamos(Long dniCliente)
             throws ClienteNoEncontradoException, ClienteSinPrestamosException {
 
-        // Se verifica que exista un cliente con el DNI ingresado
+        // Verifica si el cliente existe
         Cliente cliente = clienteDao.findCliente(dniCliente);
         if (cliente == null) {
-            throw new ClienteSinPrestamosException ("No existe un cliente con el DNI ingresado");
+            throw new ClienteNoEncontradoException("No existe un cliente con el DNI ingresado");
         }
 
-        // Se arma el resultado con la lista de préstamos del cliente y se retorna
+        // Obtiene los préstamos del cliente
         Set<Prestamo> prestamosDelCliente = prestamoDao.findPrestamosDelCliente(dniCliente);
-        if (prestamosDelCliente.isEmpty()) {
-            throw new ClienteSinPrestamosException ("El cliente no tiene préstamos");
-        } else {
-            return prestamosDelCliente;
+        if (prestamosDelCliente == null || prestamosDelCliente.isEmpty()) {
+            throw new ClienteSinPrestamosException("El cliente no tiene préstamos");
         }
+
+        return prestamosDelCliente;
     }
+
 }

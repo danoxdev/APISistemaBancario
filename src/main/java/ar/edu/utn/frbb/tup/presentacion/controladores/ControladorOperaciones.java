@@ -29,9 +29,14 @@ public class ControladorOperaciones {
     //Consulta de saldo
     @GetMapping("/consultarsaldo/{cbu}")
     public ResponseEntity<Operacion> getConsultarSaldo(@PathVariable Long cbu) throws CuentaNoEncontradaException {
-        validacionesPresentacion.validarCBU(cbu);
-        return new ResponseEntity<>(servicioOperaciones.consultarSaldo(cbu), HttpStatus.OK);
+        validacionesPresentacion.validarCBU(cbu); // Validación
+        Operacion operacion = servicioOperaciones.consultarSaldo(cbu);
+        if (operacion == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(operacion, HttpStatus.OK);
     }
+
 
     //Deposito
     @PutMapping("/deposito/{cbu}")
