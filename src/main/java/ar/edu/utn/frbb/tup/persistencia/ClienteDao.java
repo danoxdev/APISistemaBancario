@@ -39,6 +39,10 @@ public class ClienteDao extends BaseDao<Cliente> {
 
     public Cliente findCliente(Long dni) {
         Cliente cliente = findInfo(dni, RUTA_ARCHIVO);
+        //Verificar que el cliente no sea nulo antes de recuperar las cuentas y préstamos
+        if (cliente == null) {
+            return null;
+        }
 
         // Recuperar las cuentas del cliente
         Set<Cuenta> cuentas = cuentaDao.findAllCuentasDelCliente(dni);
