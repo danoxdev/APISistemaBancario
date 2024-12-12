@@ -16,13 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class TestServiciosEliminarCliente {
 
     @InjectMocks
@@ -61,7 +61,7 @@ class TestServiciosEliminarCliente {
         doNothing().when(validacionesServicios).validarClienteSinCuentas(dni);
         doNothing().when(validacionesServicios).validarClienteSinPrestamos(dni);
 
-        // Mockeo que no haya cuentas asociadas
+        // Mockeo la obtención de relaciones de CBU (vacía en este caso)
         when(cuentaDao.getRelacionesDni(dni)).thenReturn(Collections.emptyList());
 
         // Mockeo la eliminación del cliente
@@ -80,7 +80,6 @@ class TestServiciosEliminarCliente {
         verify(validacionesServicios, times(1)).validarClienteSinPrestamos(dni);
         verify(clienteDao, times(1)).deleteCliente(dni);
         verify(cuentaDao, times(1)).getRelacionesDni(dni);
-        // Como la lista está vacía, no se elimina ninguna cuenta ni movimiento.
         verifyNoMoreInteractions(clienteDao, cuentaDao, movimientosDao, validacionesServicios);
     }
 
