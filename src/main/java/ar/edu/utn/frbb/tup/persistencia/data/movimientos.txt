@@ -1,1 +1,4 @@
 CBU Origen, Fecha de operacion, Hora de operacion, Tipo de operacion, Monto
+21200410,2024-12-12,10:15:48,Consulta,0.0
+21200410,2024-12-12,10:16:11,Extraccion,500000.0
+21200410,2024-12-12,10:16:17,Consulta,0.0

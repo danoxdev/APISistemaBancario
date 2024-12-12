@@ -81,7 +81,7 @@ public class ServicioPrestamo {
         if (servicioScoreCrediticio.scoreCrediticio(cliente.getDni())) {
 
             // Si el préstamo es aprobado, se calcula el monto total y el monto mensual
-            double montoTotal = monto * plazoMeses * tasaInteresMensual + monto;
+            double montoTotal = monto * Math.pow(1 + tasaInteresMensual, plazoMeses); // Interés compuesto mensual
             double montoMensual = montoTotal / plazoMeses;
 
             // Se genera el ID del préstamo buscando el ID del último préstamo agregado y se le suma 1
@@ -89,7 +89,7 @@ public class ServicioPrestamo {
             int id = prestamos.isEmpty() ? 1 : prestamos.get(prestamos.size() - 1).getIdPrestamo() + 1;
 
             // Se crea el préstamo y se agrega a la base de datos
-            Prestamo prestamo = new Prestamo(id, cliente.getDni(), monto, plazoMeses, 0, monto);
+            Prestamo prestamo = new Prestamo(id, cliente.getDni(), monto, plazoMeses, 0, montoTotal);
             prestamoDao.savePrestamo(prestamo);
 
             //Elimino la cuenta para actualizar el archivo

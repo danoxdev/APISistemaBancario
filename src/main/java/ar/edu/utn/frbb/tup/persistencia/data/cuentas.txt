@@ -1,1 +1,3 @@
 CBU, DNI Titular, Tipo de cuenta, Moneda, Alias, Fecha de creacion, Saldo
+106423508,32563401,CAJA_AHORRO,DOLARES,ahorroPesos,2024-12-12,0.0
+21200410,32563401,CAJA_AHORRO,PESOS,ahorroPesos,2024-12-12,500000.0
