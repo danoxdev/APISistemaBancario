@@ -8,11 +8,12 @@ import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
-@Component
+@Service
 public class ServicioCuentas {
     private final ValidacionesServicios validar;
     private final CuentaDao cuentaDao;

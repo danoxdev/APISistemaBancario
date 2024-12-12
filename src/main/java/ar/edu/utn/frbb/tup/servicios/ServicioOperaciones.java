@@ -9,10 +9,11 @@ import ar.edu.utn.frbb.tup.modelo.Operacion;
 import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class ServicioOperaciones {
     private final ValidacionesServicios validar;
     private final CuentaDao cuentaDao;

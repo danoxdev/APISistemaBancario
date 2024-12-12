@@ -7,9 +7,11 @@ import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.persistencia.MovimientosDao;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-@Component
+@Service
 public class ServicioClientes {
 
     private final ValidacionesServicios validacionesServicios;
@@ -35,7 +37,7 @@ public class ServicioClientes {
 
     public Cliente crearCliente(ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
         // Validar cliente antes de crearlo
-        validacionesServicios.validarDni(clienteDto.getDni());
+//        validacionesServicios.validarDni(clienteDto.getDni());
         validacionesServicios.validarClienteYaExiste(clienteDto);
         validacionesServicios.esMayordeEdad(clienteDto.getFechaNacimiento());
 

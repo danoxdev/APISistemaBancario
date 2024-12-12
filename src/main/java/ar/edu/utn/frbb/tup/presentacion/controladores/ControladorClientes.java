@@ -43,6 +43,7 @@ public class ControladorClientes {
     @PostMapping
     public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDto clienteDto) throws ClienteExistenteException, ClienteMenorDeEdadException {
         validacionesPresentacion.validarDatosCompletos(clienteDto);
+        validacionesPresentacion.validarDni(clienteDto.getDni());
         return new ResponseEntity<>(servicioClientes.crearCliente(clienteDto), HttpStatus.CREATED);
     }
 

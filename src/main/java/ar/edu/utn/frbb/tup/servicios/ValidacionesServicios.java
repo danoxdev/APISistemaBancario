@@ -33,17 +33,6 @@ public class ValidacionesServicios {
         }
     }
 
-    //Validar DNI
-    public void validarDni(Long dni) {
-        try {
-            if (dni == 0 || dni < 1000000 || dni > 99999999) {
-                throw new IllegalArgumentException("Error: El dni debe tener entre 7 y 8 digitos");
-            }
-        } catch(NumberFormatException e){
-            throw new IllegalArgumentException("Error: El dni debe ser un numero");
-        }
-    }
-
     //Validar que el cliente no exista
     public void validarClienteYaExiste(ClienteDto clienteDto) throws ClienteExistenteException {
         if (clienteDao.findCliente(clienteDto.getDni()) != null){

@@ -4,9 +4,10 @@ import ar.edu.utn.frbb.tup.modelo.TipoMoneda;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.ClienteDto;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.CuentaDto;
 import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class ValidacionesPresentacion {
 
     // VALIDACIONES DE CLIENTES //

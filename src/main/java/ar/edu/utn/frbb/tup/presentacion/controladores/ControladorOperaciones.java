@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("api/operaciones")
 
 public class ControladorOperaciones {
-    private ValidacionesPresentacion validacionesPresentacion;
+    private final ValidacionesPresentacion validacionesPresentacion;
     private final ServicioOperaciones servicioOperaciones;
 
     public ControladorOperaciones(ValidacionesPresentacion validacionesPresentacion, ServicioOperaciones servicioOperaciones) {

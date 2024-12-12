@@ -10,10 +10,11 @@ import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
 import ar.edu.utn.frbb.tup.excepciones.CuentaMonedaNoExisteException;
 import ar.edu.utn.frbb.tup.servicios.ServicioScoreCrediticio;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component
+@Service
 public class ServicioPrestamo {
 
     private PrestamoDao prestamoDao;
