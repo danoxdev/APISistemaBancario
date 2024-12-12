@@ -105,5 +105,4 @@ public class ValidacionesServicios {
             throw new CuentaSinDineroException("No posee saldo suficiente para realizar la operacion, su saldo es de $" + cuenta.getSaldo());
         }
     }
-
 }
