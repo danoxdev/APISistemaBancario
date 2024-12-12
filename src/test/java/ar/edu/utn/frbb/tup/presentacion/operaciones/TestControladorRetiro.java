@@ -36,7 +36,7 @@ class TestControladorRetiro {
     @Test
     void getRetiroExitosamente() throws CuentaNoEncontradaException, CuentaSinDineroException {
         // Preparo datos de entrada
-        Long cbu = 11111111L;
+        Long cbu = 87654321L;
         double monto = 500.0;
         Operacion operacionMock = new Operacion();
         operacionMock.setCbu(cbu);
@@ -68,7 +68,7 @@ class TestControladorRetiro {
     @Test
     void getRetiroCuentaNoEncontrada() throws CuentaNoEncontradaException, CuentaSinDineroException {
         // Preparo datos de entrada
-        Long cbu = 11111111L;
+        Long cbu = 87654321L;
         double monto = 500.0;
 
         // Mockeo la validación de CBU y monto
@@ -96,7 +96,7 @@ class TestControladorRetiro {
     @Test
     void getRetiroSinDinero() throws CuentaNoEncontradaException, CuentaSinDineroException {
         // Preparo datos de entrada
-        Long cbu = 11111111L;
+        Long cbu = 87654321L;
         double monto = 500.0;
 
         // Mockeo la validación de CBU y monto

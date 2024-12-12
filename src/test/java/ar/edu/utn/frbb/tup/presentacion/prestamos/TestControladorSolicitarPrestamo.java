@@ -2,39 +2,37 @@ package ar.edu.utn.frbb.tup.presentacion.prestamos;
 
 import ar.edu.utn.frbb.tup.excepciones.ClienteNoEncontradoException;
 import ar.edu.utn.frbb.tup.excepciones.CuentaMonedaNoExisteException;
-import ar.edu.utn.frbb.tup.modelo.*;
-import ar.edu.utn.frbb.tup.persistencia.ClienteDao;
-import ar.edu.utn.frbb.tup.persistencia.CuentaDao;
-import ar.edu.utn.frbb.tup.persistencia.PrestamoDao;
+import ar.edu.utn.frbb.tup.modelo.Prestamo;
+import ar.edu.utn.frbb.tup.presentacion.controladores.ControladorPrestamo;
+import ar.edu.utn.frbb.tup.presentacion.DTOs.PrestamoDto;
+import ar.edu.utn.frbb.tup.presentacion.ValidacionesPresentacion;
 import ar.edu.utn.frbb.tup.servicios.ServicioPrestamo;
-import ar.edu.utn.frbb.tup.servicios.ServicioScoreCrediticio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class TestControladorSolicitarPrestamo {
 
     @InjectMocks
+    private ControladorPrestamo controladorPrestamo;
+
+    @Mock
+    private ValidacionesPresentacion validacionesPresentacion;
+
+    @Mock
     private ServicioPrestamo servicioPrestamo;
-
-    @Mock
-    private ClienteDao clienteDao;
-
-    @Mock
-    private CuentaDao cuentaDao;
-
-    @Mock
-    private PrestamoDao prestamoDao;
-
-    @Mock
-    private ServicioScoreCrediticio servicioScoreCrediticio;
 
     @BeforeEach
     void setUp() {
@@ -42,92 +40,68 @@ class TestControladorSolicitarPrestamo {
     }
 
     @Test
-    void solicitarPrestamoExitosamente() throws ClienteNoEncontradoException, CuentaMonedaNoExisteException {
-        // Datos de entrada
-        Long dniCliente = 12345678L;
-        int plazoMeses = 12;
-        double monto = 10000.00;
-        String tipoMoneda = "PESOS";
+    void solicitarPrestamoExitosamente() throws CuentaMonedaNoExisteException, ClienteNoEncontradoException {
+        // Preparo datos de entrada
+        PrestamoDto prestamoDto = new PrestamoDto();
+        prestamoDto.setDniCliente(12345678L);
+        prestamoDto.setMonto(10000.0);
+        prestamoDto.setPlazoMeses(12);
+        prestamoDto.setTipoMoneda("PESOS");
 
-        // Cliente mockeado
-        Cliente cliente = new Cliente();
-        cliente.setDni(dniCliente);
+        // Mockeo la validación de solicitud de préstamo
+        doNothing().when(validacionesPresentacion).validarSolicitudPrestamo(prestamoDto);
 
-        // Cuenta mockeada
-        Cuenta cuenta = new Cuenta();
-        cuenta.setDniTitular(dniCliente);
-        cuenta.setSaldo(5000.00);
-        cuenta.setTipoMoneda(TipoMoneda.PESOS);
-        cuenta.setTipoCuenta(TipoCuenta.CAJA_AHORRO);
+        // Mockeo el servicio de solicitud de préstamo
+        Prestamo prestamo = new Prestamo(1, 12345678L, 10000.0, 12, 0, 10000.0);
+        Map<String, Object> resultadoMock = new HashMap<>();
+        resultadoMock.put("estado", "Aprobado");
+        resultadoMock.put("mensaje", "Préstamo aprobado y acreditado");
+        resultadoMock.put("prestamo", prestamo);
+        when(servicioPrestamo.solicitarPrestamo(prestamoDto.getDniCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getTipoMoneda()))
+                .thenReturn(resultadoMock);
 
-        // Configuración de mocks
-        when(clienteDao.findCliente(dniCliente)).thenReturn(cliente);
-        when(cuentaDao.findAllCuentasDelCliente(dniCliente)).thenReturn(Collections.singleton(cuenta));
-        when(servicioScoreCrediticio.scoreCrediticio(dniCliente)).thenReturn(true);
-        when(prestamoDao.findAllPrestamos()).thenReturn(new ArrayList<>());
+        // Ejecuto el método a testear
+        ResponseEntity<Map<String, Object>> response = controladorPrestamo.solicitarPrestamo(prestamoDto);
 
-        // Ejecutar método
-        Map<String, Object> resultado = servicioPrestamo.solicitarPrestamo(dniCliente, plazoMeses, monto, tipoMoneda);
+        // Verifico el resultado
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Aprobado", response.getBody().get("estado"));
+        assertEquals("Préstamo aprobado y acreditado", response.getBody().get("mensaje"));
 
-        // Validaciones
-        assertNotNull(resultado);
-        assertEquals("Aprobado", resultado.get("estado"));
-        assertTrue(resultado.get("mensaje").toString().contains("El préstamo fue acreditado en su cuenta bancaria"));
-        assertEquals(plazoMeses, ((List<?>) resultado.get("planPagos")).size());
-
-        // Verificar interacciones con mocks
-        verify(clienteDao, times(1)).findCliente(dniCliente);
-        verify(cuentaDao, times(1)).findAllCuentasDelCliente(dniCliente);
-        verify(servicioScoreCrediticio, times(1)).scoreCrediticio(dniCliente);
-        verify(prestamoDao, times(1)).savePrestamo(any());
-        verify(cuentaDao, times(1)).saveCuenta(any());
+        // Verifico las interacciones con los mocks
+        verify(validacionesPresentacion, times(1)).validarSolicitudPrestamo(prestamoDto);
+        verify(servicioPrestamo, times(1)).solicitarPrestamo(prestamoDto.getDniCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getTipoMoneda());
     }
 
     @Test
-    void solicitarPrestamoClienteNoEncontrado() {
-        // Datos de entrada
-        Long dniCliente = 98765432L;
-        int plazoMeses = 12;
-        double monto = 10000.00;
-        String tipoMoneda = "PESOS";
+    void solicitarPrestamoCuentaMonedaNoExiste() throws CuentaMonedaNoExisteException, ClienteNoEncontradoException {
+        // Preparo datos de entrada
+        PrestamoDto prestamoDto = new PrestamoDto();
+        prestamoDto.setDniCliente(12345678L);
+        prestamoDto.setMonto(10000.0);
+        prestamoDto.setPlazoMeses(12);
+        prestamoDto.setTipoMoneda("DOLARES");
 
-        // Configurar mocks
-        when(clienteDao.findCliente(dniCliente)).thenReturn(null);
+        // Mockeo la validación de solicitud de préstamo
+        doNothing().when(validacionesPresentacion).validarSolicitudPrestamo(prestamoDto);
 
-        // Ejecutar y verificar excepción
-        ClienteNoEncontradoException exception = assertThrows(
-                ClienteNoEncontradoException.class,
-                () -> servicioPrestamo.solicitarPrestamo(dniCliente, plazoMeses, monto, tipoMoneda)
-        );
+        // Mockeo que el servicio lance una excepción
+        when(servicioPrestamo.solicitarPrestamo(prestamoDto.getDniCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getTipoMoneda()))
+                .thenThrow(new CuentaMonedaNoExisteException("No existe una cuenta bancaria con la moneda ingresada"));
 
-        assertEquals("No existe un cliente con el DNI ingresado", exception.getMessage());
-        verify(clienteDao, times(1)).findCliente(dniCliente);
-    }
-
-    @Test
-    void solicitarPrestamoCuentaNoExiste() throws ClienteNoEncontradoException {
-        // Datos de entrada
-        Long dniCliente = 12345678L;
-        int plazoMeses = 12;
-        double monto = 10000.00;
-        String tipoMoneda = "PESOS";
-
-        // Cliente mockeado
-        Cliente cliente = new Cliente();
-        cliente.setDni(dniCliente);
-
-        // Configuración de mocks
-        when(clienteDao.findCliente(dniCliente)).thenReturn(cliente);
-        when(cuentaDao.findAllCuentasDelCliente(dniCliente)).thenReturn(Collections.emptySet());
-
-        // Ejecutar y verificar excepción
+        // Llamo al método y espero la excepción
         CuentaMonedaNoExisteException exception = assertThrows(
                 CuentaMonedaNoExisteException.class,
-                () -> servicioPrestamo.solicitarPrestamo(dniCliente, plazoMeses, monto, tipoMoneda)
+                () -> controladorPrestamo.solicitarPrestamo(prestamoDto)
         );
 
+        // Verifico el mensaje de la excepción
         assertEquals("No existe una cuenta bancaria con la moneda ingresada", exception.getMessage());
-        verify(clienteDao, times(1)).findCliente(dniCliente);
-        verify(cuentaDao, times(1)).findAllCuentasDelCliente(dniCliente);
+
+        // Verifico las interacciones con los mocks
+        verify(validacionesPresentacion, times(1)).validarSolicitudPrestamo(prestamoDto);
+        verify(servicioPrestamo, times(1)).solicitarPrestamo(prestamoDto.getDniCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getTipoMoneda());
     }
 }

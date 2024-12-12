@@ -1,10 +1,8 @@
 package ar.edu.utn.frbb.tup.persistencia;
 
-import ar.edu.utn.frbb.tup.excepciones.PrestamosVaciosException;
 import ar.edu.utn.frbb.tup.modelo.Prestamo;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
