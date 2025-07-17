@@ -4,5 +4,5 @@ Desarrollo de una API en Java con Spring la cual simula un sistema de administra
 
 Documentación: https://drive.google.com/file/d/12PXsto2PHJaBBoqABW9LOCNNsGhyfmJE/view?usp=sharing
 
-Repositorio: https://github.com/daniel-donofrio/APISistemaBancario
+Repositorio: https://github.com/danoxdev/APISistemaBancario
 
